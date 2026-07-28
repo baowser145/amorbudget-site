@@ -33,14 +33,22 @@ const icons: Record<string, string> = {
 <section id="features" class="section features">
   <div class="container">
     <div class="features-head">
-      <p class="eyebrow">Why Amor Budget</p>
       <h2 class="h2">Built for people who dread budgeting apps.</h2>
     </div>
     <ul class="feature-grid">
       {
-        features.map((f) => (
-          <li class="feature-card">
-            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={icons[f.icon]} />
+        features.map((f, i) => (
+          <li class="feature-card" data-reveal style={`transition-delay: ${i * 90}ms`}>
+            <svg
+              class="feature-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              set:html={icons[f.icon]}
+            />
             <h3 class="feature-title">{f.title}</h3>
             <p class="feature-body">{f.body}</p>
           </li>
@@ -56,17 +64,13 @@ const icons: Record<string, string> = {
     margin-bottom: var(--space-5);
   }
 
-  .features-head .eyebrow {
-    color: var(--ab-accent);
-    margin-bottom: var(--space-1);
-  }
-
   .feature-grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1.3fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
     gap: var(--space-3);
   }
 
@@ -74,7 +78,39 @@ const icons: Record<string, string> = {
     background: var(--ab-surface);
     border: 1.5px solid var(--ab-border);
     border-radius: 20px;
-    padding: var(--space-3);
+    padding: var(--space-4);
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 34px -18px rgba(43, 46, 35, 0.22);
+  }
+
+  .feature-card:first-child {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    background: var(--ab-accent);
+    border: none;
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .feature-card:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .feature-card:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .feature-card:nth-child(4) {
+    grid-column: 2;
+    grid-row: 3;
   }
 
   .feature-icon {
@@ -86,6 +122,15 @@ const icons: Record<string, string> = {
     padding: 9px;
     box-sizing: content-box;
     margin-bottom: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  .feature-card:first-child .feature-icon {
+    width: 32px;
+    height: 32px;
+    padding: 12px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.16);
   }
 
   .feature-title {
@@ -93,6 +138,12 @@ const icons: Record<string, string> = {
     font-weight: 800;
     color: var(--ab-ink);
     margin: 0 0 6px;
+  }
+
+  .feature-card:first-child .feature-title {
+    font-size: 23px;
+    color: var(--ab-accent-on);
+    max-width: 14ch;
   }
 
   .feature-body {
@@ -103,9 +154,24 @@ const icons: Record<string, string> = {
     line-height: 1.55;
   }
 
-  @media (max-width: 640px) {
+  .feature-card:first-child .feature-body {
+    font-size: 15.5px;
+    color: #ffffff;
+    max-width: 32ch;
+  }
+
+  @media (max-width: 780px) {
     .feature-grid {
       grid-template-columns: 1fr;
+      grid-template-rows: none;
+    }
+
+    .feature-card:first-child,
+    .feature-card:nth-child(2),
+    .feature-card:nth-child(3),
+    .feature-card:nth-child(4) {
+      grid-column: auto;
+      grid-row: auto;
     }
   }
 </style>

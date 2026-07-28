@@ -56,6 +56,7 @@ import appIcon from '../assets/app-icon.png';
   }
 
   .nav-links a {
+    position: relative;
     font-size: 15px;
     font-weight: 700;
     color: var(--muted-copy);
@@ -63,8 +64,26 @@ import appIcon from '../assets/app-icon.png';
     padding: 10px 2px;
   }
 
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: 6px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--ab-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
   .nav-links a:hover {
     color: var(--ab-accent);
+  }
+
+  .nav-links a:hover::after {
+    transform: scaleX(1);
   }
 
   @media (max-width: 560px) {

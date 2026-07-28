@@ -5,7 +5,7 @@ import homeShot from '../assets/screenshots/home.png';
 
 <section id="screenshots" class="section screenshots">
   <div class="container screenshots-row">
-    <div class="screenshots-media">
+    <div class="screenshots-media" data-reveal>
       <div class="phone-frame">
         <Image
           src={homeShot}
@@ -17,8 +17,7 @@ import homeShot from '../assets/screenshots/home.png';
         />
       </div>
     </div>
-    <div class="screenshots-copy">
-      <p class="eyebrow">A look inside</p>
+    <div class="screenshots-copy" data-reveal style="transition-delay: 120ms">
       <h2 class="h2">Home shows everything you need in one glance.</h2>
       <p class="lede">
         Today's budget, bills due this week, and your last few purchases,
@@ -44,6 +43,7 @@ import homeShot from '../assets/screenshots/home.png';
   .screenshots-media {
     display: flex;
     justify-content: center;
+    perspective: 1400px;
   }
 
   .phone-frame {
@@ -52,17 +52,18 @@ import homeShot from '../assets/screenshots/home.png';
     background: var(--ab-ink);
     padding: 10px;
     box-shadow: 0 30px 60px -20px rgba(43, 46, 35, 0.35);
+    transform: rotate(-2deg);
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .screenshots-media:hover .phone-frame {
+    transform: rotate(0deg) translateY(-6px);
   }
 
   .phone-screen {
     width: 100%;
     height: auto;
     border-radius: 27px;
-  }
-
-  .screenshots-copy .eyebrow {
-    color: var(--ab-accent);
-    margin-bottom: var(--space-1);
   }
 
   .screenshots-copy .h2 {
@@ -84,6 +85,7 @@ import homeShot from '../assets/screenshots/home.png';
     }
     .phone-frame {
       width: 230px;
+      transform: rotate(-1deg);
     }
   }
 </style>
