@@ -3,9 +3,10 @@ import { Image } from 'astro:assets';
 import homeShot from '../assets/screenshots/home.png';
 ---
 
-<section id="screenshots" class="section screenshots">
+<section id="screenshots" class="section screenshots-section">
   <div class="container screenshots-row">
     <div class="screenshots-media" data-reveal>
+      <div class="phone-glow" aria-hidden="true"></div>
       <div class="phone-frame">
         <Image
           src={homeShot}
@@ -29,6 +30,11 @@ import homeShot from '../assets/screenshots/home.png';
 </section>
 
 <style>
+  .screenshots-section {
+    background: var(--ab-ink);
+    color: var(--ab-accent-on);
+  }
+
   .screenshots-row {
     display: grid;
     grid-template-columns: 0.9fr 1.1fr;
@@ -40,18 +46,44 @@ import homeShot from '../assets/screenshots/home.png';
     padding-top: var(--space-5);
   }
 
+  .screenshots-copy .h2 {
+    color: var(--ab-accent-on);
+    margin-bottom: var(--space-2);
+  }
+
+  .screenshots-copy .lede {
+    color: var(--muted-on-ink);
+    max-width: 44ch;
+  }
+
   .screenshots-media {
+    position: relative;
     display: flex;
     justify-content: center;
     perspective: 1400px;
   }
 
+  .phone-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 380px;
+    height: 380px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, var(--ab-accent) 0%, rgba(95, 122, 82, 0) 70%);
+    opacity: 0.35;
+    z-index: 0;
+  }
+
   .phone-frame {
+    position: relative;
+    z-index: 1;
     width: 280px;
     border-radius: 36px;
     background: var(--ab-ink);
     padding: 10px;
-    box-shadow: 0 30px 60px -20px rgba(43, 46, 35, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 30px 60px -16px rgba(0, 0, 0, 0.55);
     transform: rotate(-2deg);
     transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -64,14 +96,6 @@ import homeShot from '../assets/screenshots/home.png';
     width: 100%;
     height: auto;
     border-radius: 27px;
-  }
-
-  .screenshots-copy .h2 {
-    margin-bottom: var(--space-2);
-  }
-
-  .screenshots-copy .lede {
-    max-width: 44ch;
   }
 
   @media (max-width: 860px) {

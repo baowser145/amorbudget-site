@@ -37,6 +37,10 @@
   --ab-gold-soft: #F5EDD2;
   --ab-gold-text: #8A7228;
 
+  /* Light-on-dark variant of --muted-copy, for the ink-background
+     Screenshots section (7.10:1 on --ab-ink). */
+  --muted-on-ink: #B7BCA8;
+
   --ab-font: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --space-1: 8px;

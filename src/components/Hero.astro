@@ -4,12 +4,21 @@ import loginShot from '../assets/screenshots/login.png';
 ---
 
 <section id="top" class="hero">
-  <div class="hero-blob" aria-hidden="true"></div>
+  <svg class="hero-watermark" viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      d="M12 21s-7.5-4.6-10-9.5C.5 7.5 3 3 7 3c2 0 3.5 1 5 3 1.5-2 3-3 5-3 4 0 6.5 4.5 5 8.5-2.5 4.9-10 9.5-10 9.5z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="0.6"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+    />
+  </svg>
   <div class="container hero-row">
     <div class="hero-copy">
       <p class="eyebrow" data-hero-in style="--hero-in-order: 0">Coming soon to iOS</p>
       <h1 class="h1" data-hero-in style="--hero-in-order: 1">
-        Know exactly what's safe to spend, today.
+        Know exactly what's safe to spend, <span class="accent-word">today</span>.
       </h1>
       <p class="lede" data-hero-in style="--hero-in-order: 2">
         Amor Budget splits every dollar into Needs and Wants, tracks bills
@@ -45,15 +54,24 @@ import loginShot from '../assets/screenshots/login.png';
     overflow: clip;
   }
 
-  .hero-blob {
+  .hero-watermark {
     position: absolute;
-    top: -180px;
-    right: -140px;
-    width: 640px;
-    height: 640px;
-    background: radial-gradient(circle, var(--ab-accent-soft) 0%, rgba(233, 238, 223, 0) 70%);
-    filter: blur(10px);
+    top: -60px;
+    right: -160px;
+    width: 620px;
+    height: 620px;
+    color: var(--ab-accent);
+    opacity: 0.07;
     z-index: -1;
+  }
+
+  @media (max-width: 860px) {
+    .hero-watermark {
+      width: 420px;
+      height: 420px;
+      top: -40px;
+      right: -180px;
+    }
   }
 
   .hero-row {
@@ -71,6 +89,10 @@ import loginShot from '../assets/screenshots/login.png';
   .hero-copy .h1 {
     margin-bottom: var(--space-3);
     max-width: 15ch;
+  }
+
+  .accent-word {
+    color: var(--ab-accent);
   }
 
   .hero-copy .lede {
