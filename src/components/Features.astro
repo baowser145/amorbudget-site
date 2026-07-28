@@ -1,0 +1,111 @@
+---
+const features = [
+  {
+    title: 'Needs and Wants, split automatically',
+    body: "Every dollar lands in one bucket or the other, so you always know what's left for essentials versus everything else.",
+    icon: 'home',
+  },
+  {
+    title: 'Bills that warn you before they hit',
+    body: 'Recurring bills show up days ahead with their due date, so nothing surprises your balance.',
+    icon: 'bell',
+  },
+  {
+    title: "Today's real number",
+    body: "One figure on Home: what's actually safe to spend today, after bills and savings are accounted for.",
+    icon: 'spark',
+  },
+  {
+    title: 'No bank linking required',
+    body: 'Log spending yourself in seconds. Nothing to connect, no account credentials to hand over.',
+    icon: 'shield',
+  },
+];
+
+const icons: Record<string, string> = {
+  home: '<path d="M4 11.5 12 5l8 6.5" /><path d="M6 10v8.5a1 1 0 0 0 1 1h3.5v-5h3v5H17a1 1 0 0 0 1-1V10" />',
+  bell: '<path d="M7 9a5 5 0 0 1 10 0c0 4 1.5 5.5 2 6.5H5c.5-1 2-2.5 2-6.5Z" /><path d="M10 19a2 2 0 0 0 4 0" />',
+  spark: '<path d="M12 4v4M12 16v4M4 12h4M16 12h4" /><path d="m6.5 6.5 2.5 2.5M15 15l2.5 2.5M6.5 17.5 9 15M15 9l2.5-2.5" />',
+  shield: '<path d="M12 4.5 5.5 7v5c0 4.2 2.8 7 6.5 8.5 3.7-1.5 6.5-4.3 6.5-8.5V7L12 4.5Z" /><path d="m9 12 2 2 4-4" />',
+};
+---
+
+<section id="features" class="section features">
+  <div class="container">
+    <div class="features-head">
+      <p class="eyebrow">Why Amor Budget</p>
+      <h2 class="h2">Built for people who dread budgeting apps.</h2>
+    </div>
+    <ul class="feature-grid">
+      {
+        features.map((f) => (
+          <li class="feature-card">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={icons[f.icon]} />
+            <h3 class="feature-title">{f.title}</h3>
+            <p class="feature-body">{f.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .features-head {
+    max-width: 640px;
+    margin-bottom: var(--space-5);
+  }
+
+  .features-head .eyebrow {
+    color: var(--ab-accent);
+    margin-bottom: var(--space-1);
+  }
+
+  .feature-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .feature-card {
+    background: var(--ab-surface);
+    border: 1.5px solid var(--ab-border);
+    border-radius: 20px;
+    padding: var(--space-3);
+  }
+
+  .feature-icon {
+    width: 26px;
+    height: 26px;
+    color: var(--ab-accent);
+    background: var(--ab-accent-soft);
+    border-radius: 12px;
+    padding: 9px;
+    box-sizing: content-box;
+    margin-bottom: var(--space-2);
+  }
+
+  .feature-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--ab-ink);
+    margin: 0 0 6px;
+  }
+
+  .feature-body {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--ab-muted);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 640px) {
+    .feature-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

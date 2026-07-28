@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import homeShot from '../assets/screenshots/home.png';
+---
+
+<section id="screenshots" class="section screenshots">
+  <div class="container screenshots-row">
+    <div class="screenshots-media">
+      <div class="phone-frame">
+        <Image
+          src={homeShot}
+          alt="Amor Budget's Home tab showing today's Needs and Wants budget, upcoming bills, and recent spending"
+          widths={[320, 480, 640]}
+          sizes="(max-width: 720px) 240px, 320px"
+          loading="lazy"
+          class="phone-screen"
+        />
+      </div>
+    </div>
+    <div class="screenshots-copy">
+      <p class="eyebrow">A look inside</p>
+      <h2 class="h2">Home shows everything you need in one glance.</h2>
+      <p class="lede">
+        Today's budget, bills due this week, and your last few purchases,
+        all on one screen. No digging through menus to find out where you
+        stand.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .screenshots-row {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    align-items: start;
+    gap: var(--space-6);
+  }
+
+  .screenshots-copy {
+    padding-top: var(--space-5);
+  }
+
+  .screenshots-media {
+    display: flex;
+    justify-content: center;
+  }
+
+  .phone-frame {
+    width: 280px;
+    border-radius: 36px;
+    background: var(--ab-ink);
+    padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(43, 46, 35, 0.35);
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: auto;
+    border-radius: 27px;
+  }
+
+  .screenshots-copy .eyebrow {
+    color: var(--ab-accent);
+    margin-bottom: var(--space-1);
+  }
+
+  .screenshots-copy .h2 {
+    margin-bottom: var(--space-2);
+  }
+
+  .screenshots-copy .lede {
+    max-width: 44ch;
+  }
+
+  @media (max-width: 860px) {
+    .screenshots-row {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .screenshots-copy .lede {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .phone-frame {
+      width: 230px;
+    }
+  }
+</style>

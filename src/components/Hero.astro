@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import loginShot from '../assets/screenshots/login.png';
+---
+
+<section id="top" class="hero">
+  <div class="container hero-row">
+    <div class="hero-copy">
+      <p class="eyebrow">Coming soon to iOS</p>
+      <h1 class="h1">Know exactly what's safe to spend, today.</h1>
+      <p class="lede">
+        Amor Budget splits every dollar into Needs and Wants, tracks bills
+        before they're due, and shows your real number for today. No bank
+        linking, no spreadsheets.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="mailto:baohuylamvu@gmail.com?subject=Amor%20Budget%20launch">
+          Get notified at launch
+        </a>
+        <a class="btn btn-ghost" href="#features">See how it works</a>
+      </div>
+    </div>
+    <div class="hero-media" aria-hidden="true">
+      <div class="phone-frame">
+        <Image
+          src={loginShot}
+          alt=""
+          widths={[320, 480, 640]}
+          sizes="(max-width: 720px) 220px, 300px"
+          loading="eager"
+          class="phone-screen"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: var(--space-6) 0 var(--space-5);
+  }
+
+  .hero-row {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .hero-copy .eyebrow {
+    color: var(--ab-accent);
+    margin-bottom: var(--space-1);
+  }
+
+  .hero-copy .h1 {
+    margin-bottom: var(--space-2);
+  }
+
+  .hero-copy .lede {
+    max-width: 46ch;
+    margin-bottom: var(--space-3);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .hero-media {
+    display: flex;
+    justify-content: center;
+  }
+
+  .phone-frame {
+    width: 260px;
+    border-radius: 36px;
+    background: var(--ab-ink);
+    padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(43, 46, 35, 0.35);
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: auto;
+    border-radius: 27px;
+  }
+
+  @media (max-width: 860px) {
+    .hero-row {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .hero-copy .lede {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-actions {
+      justify-content: center;
+    }
+    .hero-media {
+      order: -1;
+    }
+    .phone-frame {
+      width: 220px;
+    }
+  }
+</style>
