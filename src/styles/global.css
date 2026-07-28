@@ -16,6 +16,12 @@
   --ab-muted: #8D9179;
   --ab-faint: #ABAE97;
 
+  /* --ab-muted/--ab-faint are tuned for the native app (short labels next
+     to icons, larger/bolder type). Both read below 4.5:1 on --ab-bg at
+     marketing-copy sizes -- this darker olive is for actual paragraph/
+     link text on the site so body copy stays legible (4.95:1). */
+  --muted-copy: #6A6E5A;
+
   --ab-accent: #5F7A52;
   --ab-accent-hover: #4F6743;
   --ab-accent-soft: #E9EEDF;
@@ -100,7 +106,7 @@ a {
   font-weight: 800;
   letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: var(--ab-muted);
+  color: var(--muted-copy);
 }
 
 .h1 {
@@ -124,7 +130,7 @@ a {
 .lede {
   font-size: clamp(1.05rem, 1.5vw, 1.25rem);
   font-weight: 600;
-  color: var(--ab-muted);
+  color: var(--muted-copy);
   line-height: 1.5;
 }
 
