@@ -26,10 +26,8 @@ import loginShot from '../assets/screenshots/login.png';
         linking, no spreadsheets.
       </p>
       <div class="hero-actions" data-hero-in style="--hero-in-order: 3">
-        <a class="btn btn-primary" href="mailto:baohuylamvu@gmail.com?subject=Amor%20Budget%20launch">
-          Get notified at launch
-        </a>
-        <a class="btn btn-ghost" href="#features">See how it works</a>
+        <a class="btn btn-primary" href="#features">See how it works</a>
+        <span class="coming-soon-badge">Coming soon</span>
       </div>
     </div>
     <div class="hero-media" aria-hidden="true" data-hero-in style="--hero-in-order: 2">
@@ -103,7 +101,14 @@ import loginShot from '../assets/screenshots/login.png';
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .coming-soon-badge {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--muted-copy);
   }
 
   .hero-media {

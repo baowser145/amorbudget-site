@@ -14,7 +14,6 @@ import appIcon from '../assets/app-icon.png';
         <a href="#features">Features</a>
         <a href="#screenshots">Screenshots</a>
         <a href="#merch">Merch</a>
-        <a class="btn btn-primary" href="mailto:baohuylamvu@gmail.com?subject=Amor%20Budget%20launch">Get notified</a>
       </nav>
     </div>
   </div>
@@ -62,7 +61,7 @@ import appIcon from '../assets/app-icon.png';
     gap: var(--space-3);
     background: var(--ab-bg);
     border-radius: 999px;
-    padding: 6px 6px 6px 18px;
+    padding: 6px 18px;
   }
 
   .nav-links a:not(.btn) {
@@ -96,19 +95,13 @@ import appIcon from '../assets/app-icon.png';
     transform: scaleX(1);
   }
 
-  .nav-links .btn {
-    height: 40px;
-    padding: 0 18px;
-    font-size: 14px;
-  }
-
   @media (max-width: 640px) {
-    .nav-links a:not(.btn) {
-      display: none;
-    }
     .nav-links {
-      padding: 6px;
-      background: none;
+      gap: var(--space-2);
+      padding: 6px 14px;
+    }
+    .nav-links a:not(.btn) {
+      font-size: 13px;
     }
     .nav-brand span {
       display: none;
