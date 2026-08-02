@@ -27,7 +27,7 @@ const links = [
         <span class="nav-brand-text">Amor Budget</span>
       </a>
 
-      <nav class="nav-desktop" aria-label="Primary">
+      <nav class="nav-links" aria-label="Primary">
         {
           links.map((l) => (
             <a
@@ -42,74 +42,9 @@ const links = [
       </nav>
 
       <a class="nav-cta btn btn-primary btn-plain" href="#screenshots">See the app</a>
-
-      <button
-        type="button"
-        class="nav-toggle"
-        aria-label="Open menu"
-        aria-expanded="false"
-        aria-controls="nav-panel"
-        data-nav-toggle
-      >
-        <span class="nav-toggle-bar" aria-hidden="true"></span>
-        <span class="nav-toggle-bar" aria-hidden="true"></span>
-      </button>
     </div>
   </div>
-
-  <div class="nav-panel" id="nav-panel" data-nav-panel hidden>
-    <nav class="nav-panel-links" aria-label="Mobile">
-      {
-        links.map((l, i) => (
-          <a
-            href={l.href}
-            style={`--i: ${i}`}
-            data-nav-close
-            {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-          >
-            {l.label}
-            {l.external ? <span class="ext" aria-hidden="true">↗</span> : null}
-          </a>
-        ))
-      }
-      <a class="btn btn-primary btn-plain nav-panel-cta" href="#screenshots" data-nav-close>
-        See the app
-      </a>
-    </nav>
-  </div>
 </header>
-
-<script>
-  const toggle = document.querySelector('[data-nav-toggle]');
-  const panel = document.querySelector('[data-nav-panel]');
-  if (toggle instanceof HTMLButtonElement && panel instanceof HTMLElement) {
-    const setOpen = (open: boolean) => {
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      toggle.classList.toggle('is-open', open);
-      panel.hidden = !open;
-      document.body.classList.toggle('nav-open', open);
-    };
-
-    toggle.addEventListener('click', () => {
-      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
-    });
-
-    panel.querySelectorAll('[data-nav-close]').forEach((el) => {
-      el.addEventListener('click', () => setOpen(false));
-    });
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') setOpen(false);
-    });
-  }
-</script>
-
-<style is:global>
-  body.nav-open {
-    overflow: hidden;
-  }
-</style>
 
 <style>
   .nav {
@@ -156,7 +91,7 @@ const links = [
     box-shadow: 0 2px 8px -2px rgba(43, 46, 35, 0.25);
   }
 
-  .nav-desktop {
+  .nav-links {
     display: flex;
     align-items: center;
     gap: 2px;
@@ -164,19 +99,20 @@ const links = [
     margin-right: 4px;
   }
 
-  .nav-desktop a {
+  .nav-links a {
     font-size: 14px;
     font-weight: 700;
     color: var(--muted-copy);
     text-decoration: none;
     padding: 10px 14px;
     border-radius: 999px;
+    white-space: nowrap;
     transition:
       color 220ms var(--ease-spring),
       background-color 220ms var(--ease-spring);
   }
 
-  .nav-desktop a:hover {
+  .nav-links a:hover {
     color: var(--ab-accent);
     background: var(--ab-accent-soft);
   }
@@ -194,123 +130,58 @@ const links = [
     padding: 0 18px;
   }
 
-  .nav-toggle {
-    display: none;
-    position: relative;
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 999px;
-    background: var(--ab-bg-deep);
-    cursor: pointer;
-    flex-shrink: 0;
-    margin-left: auto;
-  }
-
-  .nav-toggle-bar {
-    position: absolute;
-    left: 12px;
-    right: 12px;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--ab-ink);
-    transition:
-      transform 320ms var(--ease-spring),
-      top 320ms var(--ease-spring),
-      opacity 200ms ease;
-  }
-
-  .nav-toggle-bar:first-child {
-    top: 17px;
-  }
-
-  .nav-toggle-bar:last-child {
-    top: 25px;
-  }
-
-  .nav-toggle.is-open .nav-toggle-bar:first-child {
-    top: 21px;
-    transform: rotate(45deg);
-  }
-
-  .nav-toggle.is-open .nav-toggle-bar:last-child {
-    top: 21px;
-    transform: rotate(-45deg);
-  }
-
-  .nav-panel {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    padding: 100px 20px 40px;
-    background: color-mix(in srgb, var(--ab-bg) 88%, transparent);
-    backdrop-filter: blur(24px) saturate(1.15);
-    -webkit-backdrop-filter: blur(24px) saturate(1.15);
-  }
-
-  .nav-panel[hidden] {
-    display: none;
-  }
-
-  .nav-panel-links {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-width: 420px;
-    margin: 0 auto;
-  }
-
-  .nav-panel-links a:not(.btn) {
-    font-size: 1.65rem;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    color: var(--ab-ink);
-    text-decoration: none;
-    padding: 14px 8px;
-    border-bottom: 1px solid var(--ab-border);
-    opacity: 0;
-    transform: translateY(18px);
-    animation: panel-in 500ms var(--ease-out) both;
-    animation-delay: calc(var(--i, 0) * 60ms + 40ms);
-  }
-
-  .nav-panel-cta {
-    margin-top: 20px;
-    width: 100%;
-    opacity: 0;
-    animation: panel-in 500ms var(--ease-out) both;
-    animation-delay: 280ms;
-  }
-
-  @keyframes panel-in {
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
+  /*
+   * Every link stays visible at every width — no hamburger. A phone user
+   * reported not being able to find Merch when the links were hidden, so
+   * narrow screens tighten spacing and drop the redundant CTA instead
+   * ("App" already points at #screenshots).
+   */
   @media (max-width: 860px) {
-    .nav-desktop,
     .nav-cta {
       display: none;
-    }
-
-    .nav-toggle {
-      display: block;
     }
 
     .nav-brand-text {
       display: none;
     }
+
+    .nav-links {
+      margin-right: 0;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      padding: 10px 10px;
+    }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 560px) {
     .nav {
       padding-top: 12px;
     }
 
     .nav-island {
       min-height: 56px;
+      gap: 6px;
+      padding: 6px 8px 6px 10px;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      padding: 9px 7px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .nav-island {
+      gap: 2px;
+      padding: 6px 6px 6px 8px;
+    }
+
+    .nav-links a {
+      font-size: 11px;
+      padding: 9px 5px;
+      letter-spacing: -0.01em;
     }
   }
 </style>

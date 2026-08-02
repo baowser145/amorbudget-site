@@ -1,6 +1,32 @@
 ---
 import { Image } from 'astro:assets';
 import homeShot from '../assets/screenshots/home.png';
+
+/*
+ * Each point spotlights a region of home.png. The rect is a percentage of the
+ * screenshot box, measured off the 1206x2622 source — re-measure these if the
+ * screenshot is ever recaptured.
+ */
+const points = [
+  {
+    id: 'needs',
+    label: 'Needs vs Wants',
+    body: 'See both buckets for today, not a single confusing number.',
+    rect: { left: 5.7, top: 15.0, width: 88.7, height: 16.9 },
+  },
+  {
+    id: 'bills',
+    label: 'Bills ahead',
+    body: 'Due dates show up early so payday math stays honest.',
+    rect: { left: 6.0, top: 34.3, width: 88.0, height: 20.7 },
+  },
+  {
+    id: 'log',
+    label: 'Manual & private',
+    body: 'Log spending in seconds without connecting a bank.',
+    rect: { left: 6.0, top: 65.5, width: 88.6, height: 24.5 },
+  },
+];
 ---
 
 <section id="screenshots" class="section screenshots">
@@ -9,14 +35,29 @@ import homeShot from '../assets/screenshots/home.png';
       <div class="media-glow" aria-hidden="true"></div>
       <div class="phone-shell">
         <div class="phone-frame">
-          <Image
-            src={homeShot}
-            alt="Amor Budget Home tab with today's Needs and Wants, upcoming bills, and recent spending"
-            widths={[320, 480, 640]}
-            sizes="(max-width: 768px) 230px, 300px"
-            loading="lazy"
-            class="phone-screen"
-          />
+          <div class="phone-screen-wrap">
+            <Image
+              src={homeShot}
+              alt="Amor Budget Home tab with today's Needs and Wants, upcoming bills, and recent spending"
+              widths={[320, 480, 640]}
+              sizes="(max-width: 768px) 230px, 300px"
+              loading="lazy"
+              class="phone-screen"
+            />
+            <div class="spots" aria-hidden="true">
+              {
+                points.map((p, i) => (
+                  <span
+                    class="spot"
+                    data-spot={p.id}
+                    style={`left:${p.rect.left}%;top:${p.rect.top}%;width:${p.rect.width}%;height:${p.rect.height}%`}
+                  >
+                    <span class="spot-num">{String(i + 1).padStart(2, '0')}</span>
+                  </span>
+                ))
+              }
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -29,19 +70,23 @@ import homeShot from '../assets/screenshots/home.png';
         all on one screen. No digging through menus to find out where you stand.
       </p>
       <ul class="points">
-        <li>
-          <span class="point-label">Needs vs Wants</span>
-          <span class="point-body">See both buckets for today, not a single confusing number.</span>
-        </li>
-        <li>
-          <span class="point-label">Bills ahead</span>
-          <span class="point-body">Due dates show up early so payday math stays honest.</span>
-        </li>
-        <li>
-          <span class="point-label">Manual & private</span>
-          <span class="point-body">Log spending in seconds without connecting a bank.</span>
-        </li>
+        {
+          points.map((p, i) => (
+            <li>
+              <button type="button" class="point" data-spot={p.id}>
+                <span class="point-num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span class="point-text">
+                  <span class="point-label">{p.label}</span>
+                  <span class="point-body">{p.body}</span>
+                </span>
+              </button>
+            </li>
+          ))
+        }
       </ul>
+      <p class="points-hint">Hover or tap a point to find it on the screen.</p>
     </div>
   </div>
 </section>
@@ -113,10 +158,52 @@ import homeShot from '../assets/screenshots/home.png';
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
+  /* Clips the spotlight's oversized box-shadow to the screen itself. */
+  .phone-screen-wrap {
+    position: relative;
+    border-radius: 27px;
+    overflow: hidden;
+    line-height: 0;
+  }
+
   .phone-screen {
     width: 100%;
     height: auto;
-    border-radius: 27px;
+  }
+
+  .spots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /*
+   * Narrow screens get the static version: every region ringed and numbered
+   * to match the list. The spotlight needs the phone and the list on screen
+   * together, which only holds once the layout goes two-column.
+   */
+  .spot {
+    position: absolute;
+    border-radius: 10px;
+    border: 2px solid rgba(217, 180, 74, 0.85);
+    transition:
+      opacity 320ms var(--ease-out),
+      transform 320ms var(--ease-spring);
+  }
+
+  .spot-num {
+    position: absolute;
+    top: -9px;
+    left: -9px;
+    min-width: 20px;
+    padding: 2px 5px;
+    border-radius: 999px;
+    background: var(--ab-gold, #d9b44a);
+    color: #2b2e23;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.4;
+    text-align: center;
   }
 
   .screenshots-copy .eyebrow {
@@ -143,16 +230,46 @@ import homeShot from '../assets/screenshots/home.png';
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 8px;
   }
 
-  .points li {
+  .point {
+    width: 100%;
     display: grid;
-    gap: 4px;
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 14px;
     padding: 16px 18px;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
     border-radius: var(--radius-md);
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    transition:
+      background-color 260ms var(--ease-out),
+      border-color 260ms var(--ease-out),
+      transform 260ms var(--ease-spring);
+  }
+
+  .point:focus-visible {
+    outline: 2px solid var(--ab-gold, #d9b44a);
+    outline-offset: 3px;
+  }
+
+  .point-num {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    line-height: 1.7;
+    color: var(--ab-gold, #d9b44a);
+    transition: color 260ms var(--ease-out);
+  }
+
+  .point-text {
+    display: grid;
+    gap: 4px;
   }
 
   .point-label {
@@ -169,16 +286,84 @@ import homeShot from '../assets/screenshots/home.png';
     line-height: 1.45;
   }
 
+  .points-hint {
+    display: none;
+    margin: var(--space-3) 0 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted-on-ink);
+    opacity: 0.75;
+  }
+
+  /*
+   * Two-column layout only: the phone and the list sit side by side, so
+   * lighting one region at a time actually reads. Hover and focus both drive
+   * it, which means a tap works like a mouse — no JavaScript involved. With
+   * nothing engaged the first point stays lit, so it looks deliberate on load.
+   */
+  @media (min-width: 901px) {
+    .points-hint {
+      display: block;
+    }
+
+    .spot-num {
+      display: none;
+    }
+
+    .spot {
+      opacity: 0;
+      transform: scale(1.04);
+      border-color: var(--ab-gold, #d9b44a);
+      box-shadow: 0 0 0 9999px rgba(10, 12, 8, 0.72);
+    }
+
+    .screenshots-grid:has(.point[data-spot='needs']:hover) .spot[data-spot='needs'],
+    .screenshots-grid:has(.point[data-spot='needs']:focus) .spot[data-spot='needs'],
+    .screenshots-grid:has(.point[data-spot='bills']:hover) .spot[data-spot='bills'],
+    .screenshots-grid:has(.point[data-spot='bills']:focus) .spot[data-spot='bills'],
+    .screenshots-grid:has(.point[data-spot='log']:hover) .spot[data-spot='log'],
+    .screenshots-grid:has(.point[data-spot='log']:focus) .spot[data-spot='log'],
+    .screenshots-grid:not(:has(.point:hover)):not(:has(.point:focus))
+      .spot[data-spot='needs'] {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .screenshots-grid:has(.point:hover) .phone-shell,
+    .screenshots-grid:has(.point:focus) .phone-shell {
+      transform: rotate(0deg) translateY(-8px);
+    }
+
+    .point:hover,
+    .point:focus,
+    .screenshots-grid:not(:has(.point:hover)):not(:has(.point:focus))
+      .point[data-spot='needs'] {
+      background: rgba(217, 180, 74, 0.1);
+      border-color: rgba(217, 180, 74, 0.42);
+      transform: translateX(4px);
+      outline: none;
+    }
+
+    .point:hover .point-num,
+    .point:focus .point-num,
+    .screenshots-grid:not(:has(.point:hover)):not(:has(.point:focus))
+      .point[data-spot='needs']
+      .point-num {
+      color: var(--ab-gold, #d9b44a);
+    }
+
+    .point:not(:hover):not(:focus) .point-num {
+      color: var(--muted-on-ink);
+    }
+  }
+
   @media (max-width: 900px) {
     .screenshots-grid {
       grid-template-columns: 1fr;
       text-align: center;
     }
 
-    .screenshots-copy .lede {
-      margin-inline: auto;
-    }
-
+    .screenshots-copy .lede,
     .screenshots-copy .eyebrow {
       margin-inline: auto;
     }
