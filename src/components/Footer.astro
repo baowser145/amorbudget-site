@@ -1,39 +1,137 @@
 ---
+import { Image } from 'astro:assets';
+import appIcon from '../assets/app-icon.png';
+import { site, hasShopUrl } from '../data/site';
+
 const year = new Date().getFullYear();
+const shopLive = hasShopUrl();
 ---
 
 <footer class="footer">
-  <div class="container footer-row">
-    <p class="footer-brand">Amor Budget</p>
-    <p class="footer-copy">&copy; {year} Amor Budget. Budgeting you'll actually love.</p>
+  <div class="container footer-shell">
+    <div class="footer-card">
+      <div class="footer-top">
+        <a href="#top" class="footer-brand">
+          <Image src={appIcon} alt="" width={36} height={36} class="footer-icon" />
+          <div>
+            <p class="footer-name">{site.name}</p>
+            <p class="footer-tagline">{site.tagline}</p>
+          </div>
+        </a>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="#features">Features</a>
+          <a href="#screenshots">App</a>
+          <a href="#resources">Resources</a>
+          {
+            shopLive ? (
+              <a
+                href={site.shop.url.trim()}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Merch
+              </a>
+            ) : (
+              <a href="#merch">Merch</a>
+            )
+          }
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; {year} {site.name}</p>
+        <p class="footer-note">Made for people who want money to feel simpler.</p>
+      </div>
+    </div>
   </div>
 </footer>
 
 <style>
   .footer {
-    border-top: 1.5px solid var(--ab-border);
-    padding: var(--space-4) 0;
+    padding: 0 0 var(--space-5);
   }
 
-  .footer-row {
+  .footer-shell {
+    padding: 5px;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--ab-ink) 4%, transparent);
+    border: 1px solid var(--ab-border);
+  }
+
+  .footer-card {
+    padding: clamp(24px, 4vw, 36px);
+    border-radius: calc(var(--radius-xl) - 4px);
+    background: var(--ab-surface-raised);
+    border: 1px solid var(--ab-border);
+    box-shadow: var(--shadow-inset);
+  }
+
+  .footer-top {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--ab-border);
   }
 
   .footer-brand {
-    font-weight: 900;
-    font-size: 15px;
-    color: var(--ab-ink);
-    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
   }
 
-  .footer-copy {
+  .footer-icon {
+    border-radius: 11px;
+  }
+
+  .footer-name {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-tagline {
+    margin: 2px 0 0;
     font-size: 13px;
+    font-weight: 600;
+    color: var(--muted-copy);
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+  }
+
+  .footer-nav a {
+    font-size: 14px;
     font-weight: 700;
     color: var(--muted-copy);
+    text-decoration: none;
+    transition: color 200ms var(--ease-spring);
+  }
+
+  .footer-nav a:hover {
+    color: var(--ab-accent);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 16px;
+  }
+
+  .footer-copy,
+  .footer-note {
     margin: 0;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--muted-copy);
   }
 </style>

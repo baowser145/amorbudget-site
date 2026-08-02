@@ -20,7 +20,7 @@ const { title, description } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#FAF8F1" />
+    <meta name="theme-color" content="#F7F4EC" />
     <script is:inline>
       document.documentElement.classList.add('js');
     </script>
@@ -37,7 +37,7 @@ const { title, description } = Astro.props;
             }
           }
         },
-        { threshold: 0.2, rootMargin: '0px 0px -60px 0px' }
+        { threshold: 0.1, rootMargin: '0px 0px -48px 0px' }
       );
       document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
     </script>

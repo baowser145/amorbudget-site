@@ -5,41 +5,36 @@
 @import '@fontsource/nunito/900.css';
 
 :root {
-  /* Amor Budget palette -- "Olive & Blush", same tokens as the app
-     (src/theme/variables.css), reused as-is for brand consistency. */
-  --ab-bg: #FAF8F1;
-  --ab-surface: #FFFFFF;
-  --ab-border: #E8E2D2;
-  --ab-border-strong: #E4DCC9;
+  /* Amor Budget "Olive & Blush" — app-aligned brand tokens */
+  --ab-bg: #f7f4ec;
+  --ab-bg-deep: #f0ebdf;
+  --ab-surface: #fffcf6;
+  --ab-surface-raised: #ffffff;
+  --ab-border: rgba(43, 46, 35, 0.08);
+  --ab-border-strong: rgba(43, 46, 35, 0.12);
 
-  --ab-ink: #2B2E23;
-  --ab-muted: #8D9179;
-  --ab-faint: #ABAE97;
+  --ab-ink: #2b2e23;
+  --ab-muted: #8d9179;
+  /* Was #abae97 (~2.1:1 on cream). Darkened for AA body/meta copy. */
+  --ab-faint: #6e725c;
+  --muted-copy: #5f6350;
 
-  /* --ab-muted/--ab-faint are tuned for the native app (short labels next
-     to icons, larger/bolder type). Both read below 4.5:1 on --ab-bg at
-     marketing-copy sizes -- this darker olive is for actual paragraph/
-     link text on the site so body copy stays legible (4.95:1). */
-  --muted-copy: #6A6E5A;
+  --ab-accent: #5f7a52;
+  --ab-accent-hover: #4a633f;
+  --ab-accent-soft: #e6eddf;
+  --ab-accent-on: #f7f4e9;
+  --ab-accent-glow: rgba(95, 122, 82, 0.22);
 
-  --ab-accent: #5F7A52;
-  --ab-accent-hover: #4F6743;
-  --ab-accent-soft: #E9EEDF;
-  --ab-accent-on: #F7F4E9;
+  --ab-wants: #e9a79b;
+  --ab-wants-soft: #f9e5df;
+  --ab-wants-text: #b4685a;
 
-  --ab-wants: #E9A79B;
-  --ab-wants-icon: #C97F70;
-  --ab-wants-soft: #F9E5DF;
-  --ab-wants-text: #B4685A;
+  --ab-gold: #d9b44a;
+  --ab-gold-soft: #f5edd2;
+  --ab-gold-text: #8a7228;
 
-  --ab-gold: #D9B44A;
-  --ab-gold-icon: #B8933B;
-  --ab-gold-soft: #F5EDD2;
-  --ab-gold-text: #8A7228;
-
-  /* Light-on-dark variant of --muted-copy, for the ink-background
-     Screenshots section (7.10:1 on --ab-ink). */
-  --muted-on-ink: #B7BCA8;
+  --muted-on-ink: #b7bca8;
+  --ink-deep: #1c1e17;
 
   --ab-font: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -48,29 +43,76 @@
   --space-3: 24px;
   --space-4: 32px;
   --space-5: 48px;
-  --space-6: 64px;
-  --space-7: 96px;
-  --space-8: 128px;
+  --space-6: 72px;
+  --space-7: 112px;
+  --space-8: 144px;
+
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+  --radius-2xl: 44px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --shadow-soft: 0 8px 30px -12px rgba(43, 46, 35, 0.12);
+  --shadow-card: 0 20px 50px -24px rgba(43, 46, 35, 0.2);
+  --shadow-float: 0 28px 60px -20px rgba(43, 46, 35, 0.28);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 
   color-scheme: light;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
 }
 
 body {
   margin: 0;
+  min-height: 100dvh;
   background: var(--ab-bg);
   color: var(--ab-ink);
   font-family: var(--ab-font);
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: 17px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+/* Ambient wash */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse 70% 55% at 90% -5%, rgba(95, 122, 82, 0.14), transparent 58%),
+    radial-gradient(ellipse 55% 45% at -5% 25%, rgba(233, 167, 155, 0.1), transparent 52%),
+    radial-gradient(ellipse 40% 30% at 50% 100%, rgba(217, 180, 74, 0.06), transparent 50%),
+    var(--ab-bg);
+}
+
+/* Film grain — fixed overlay only */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 }
 
 img {
@@ -82,130 +124,199 @@ a {
   color: inherit;
 }
 
-.container {
-  width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 var(--space-3);
+:focus-visible {
+  outline: 2.5px solid var(--ab-accent);
+  outline-offset: 3px;
 }
 
-@media (max-width: 640px) {
-  .container {
-    padding: 0 var(--space-2);
-  }
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
 }
 
 .section {
   padding: var(--space-7) 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .section {
-    padding: var(--space-5) 0;
+    padding: var(--space-6) 0;
   }
 }
 
+/* ---------- type ---------- */
+
 .eyebrow {
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: 1.4px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted-copy);
+  color: var(--ab-accent);
+  background: color-mix(in srgb, var(--ab-accent-soft) 80%, white);
+  border: 1px solid color-mix(in srgb, var(--ab-accent) 12%, transparent);
 }
 
 .h1 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(2.6rem, 6.2vw, 4.75rem);
   font-weight: 900;
-  letter-spacing: -2px;
-  line-height: 1.03;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
   color: var(--ab-ink);
   margin: 0;
+  text-wrap: balance;
 }
 
 .h2 {
-  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  font-size: clamp(1.85rem, 3.6vw, 3rem);
   font-weight: 900;
-  letter-spacing: -0.8px;
-  line-height: 1.1;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
   color: var(--ab-ink);
   margin: 0;
+  text-wrap: balance;
 }
 
 .lede {
-  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  font-size: clamp(1.05rem, 1.5vw, 1.22rem);
   font-weight: 600;
   color: var(--muted-copy);
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
+  margin: 0;
 }
+
+/* ---------- buttons (button-in-button) ---------- */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 54px;
-  padding: 0 28px;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 8px 0 24px;
   border-radius: 999px;
   border: none;
   font-family: var(--ab-font);
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 800;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 200ms ease, transform 150ms ease;
-  min-width: 44px;
+  transition:
+    background-color 280ms var(--ease-spring),
+    color 280ms var(--ease-spring),
+    transform 280ms var(--ease-spring),
+    box-shadow 280ms var(--ease-spring);
 }
 
 .btn:active {
   transform: scale(0.98);
 }
 
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  font-size: 15px;
+  line-height: 1;
+  transition: transform 320ms var(--ease-spring), background-color 280ms var(--ease-spring);
+}
+
+.btn:hover .btn-icon {
+  transform: translate(2px, -1px) scale(1.05);
+}
+
 .btn-primary {
   background: var(--ab-accent);
   color: var(--ab-accent-on);
-  box-shadow: 0 1px 2px rgba(43, 46, 35, 0.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 12px 28px -14px rgba(79, 103, 67, 0.55);
+}
+
+.btn-primary .btn-icon {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
 }
 
 .btn-primary:hover {
   background: var(--ab-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px -8px rgba(79, 103, 67, 0.45);
+  box-shadow: 0 16px 32px -12px rgba(79, 103, 67, 0.5);
 }
 
 .btn-ghost {
-  background: var(--ab-surface);
+  background: var(--ab-surface-raised);
   color: var(--ab-ink);
-  border: 1.5px solid var(--ab-border-strong);
+  border: 1px solid var(--ab-border-strong);
+  box-shadow: var(--shadow-soft);
+  padding-right: 8px;
+}
+
+.btn-ghost .btn-icon {
+  background: var(--ab-bg-deep);
+  color: var(--ab-ink);
 }
 
 .btn-ghost:hover {
   background: var(--ab-accent-soft);
-  border-color: var(--ab-accent);
+  border-color: color-mix(in srgb, var(--ab-accent) 28%, transparent);
   transform: translateY(-2px);
 }
 
-/* ---------- scroll reveal (progressive enhancement) ----------
-   [data-reveal] only goes hidden once JS confirms it can run (the
-   inline script in Layout.astro adds .js to <html> before anything
-   else), so a failed/blocked script never hides page content -- see
-   impeccable's animate.md "keep content visible in the default state". */
+/* Compact button without trailing icon */
+.btn-plain {
+  padding: 0 26px;
+}
+
+/* ---------- double-bezel shell ---------- */
+
+.shell {
+  padding: 6px;
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--ab-ink) 4%, transparent);
+  border: 1px solid var(--ab-border);
+  box-shadow: var(--shadow-soft);
+}
+
+.shell-inner {
+  border-radius: calc(var(--radius-xl) - 4px);
+  background: var(--ab-surface-raised);
+  border: 1px solid var(--ab-border);
+  box-shadow: var(--shadow-inset);
+}
+
+/* ---------- scroll reveal ---------- */
+
 .js [data-reveal] {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 800ms var(--ease-out),
+    transform 800ms var(--ease-out);
+  will-change: opacity, transform;
 }
 
 .js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+  will-change: auto;
 }
-
-/* ---------- hero focal entrance (the one authored motion moment) ---------- */
 
 @keyframes hero-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(22px);
   }
   to {
     opacity: 1;
@@ -215,8 +326,8 @@ a {
 
 .js [data-hero-in] {
   opacity: 0;
-  animation: hero-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--hero-in-order, 0) * 90ms + 80ms);
+  animation: hero-in 800ms var(--ease-out) both;
+  animation-delay: calc(var(--hero-in-order, 0) * 95ms + 60ms);
 }
 
 .visually-hidden {
@@ -232,8 +343,22 @@ a {
   html {
     scroll-behavior: auto;
   }
-  * {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+
+  body::after {
+    display: none;
+  }
+
+  .js [data-reveal],
+  .js [data-hero-in] {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }

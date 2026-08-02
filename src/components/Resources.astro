@@ -1,0 +1,288 @@
+---
+import { resources, resourceTypeLabel } from '../data/resources';
+import { withAffiliate } from '../data/site';
+
+const hasItems = resources.length > 0;
+const hasAffiliate = resources.some((r) => r.affiliate);
+---
+
+<section id="resources" class="section resources">
+  <div class="container">
+    <header class="resources-head" data-reveal>
+      <p class="eyebrow">Resources</p>
+      <h2 class="h2">Books and tools worth your time.</h2>
+      <p class="lede">
+        Money reads and resources that help you spend with a plan — not guilt.
+        {
+          hasAffiliate && (
+            <span class="disclosure">
+              Some links are affiliate links. If you buy through them, Amor
+              Budget may earn a small commission at no extra cost to you.
+            </span>
+          )
+        }
+      </p>
+    </header>
+
+    {
+      hasItems ? (
+        <ul class="resource-grid">
+          {resources.map((r, i) => {
+            const href = r.affiliate ? withAffiliate(r.url) : r.url;
+            const rel = r.affiliate
+              ? 'sponsored noopener noreferrer'
+              : 'noopener noreferrer';
+            return (
+              <li
+                class="resource-item"
+                data-reveal
+                style={`transition-delay: ${i * 70}ms`}
+              >
+                <div class="resource-shell">
+                  <article class="resource-card">
+                    <div class="resource-meta">
+                      <span class="resource-type">{resourceTypeLabel[r.type]}</span>
+                      {r.affiliate && (
+                        <span class="resource-aff" title="Affiliate link">
+                          Affiliate
+                        </span>
+                      )}
+                    </div>
+                    <h3 class="resource-title">
+                      <a href={href} target="_blank" rel={rel}>
+                        {r.title}
+                      </a>
+                    </h3>
+                    {r.author && <p class="resource-author">{r.author}</p>}
+                    <p class="resource-body">{r.description}</p>
+                    <a class="resource-cta" href={href} target="_blank" rel={rel}>
+                      View
+                      <span class="resource-cta-icon" aria-hidden="true">↗</span>
+                    </a>
+                  </article>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <div class="empty-shell" data-reveal>
+          <div class="empty-card">
+            <p class="empty-kicker">Coming soon</p>
+            <p class="empty-title">A short list of money resources we trust.</p>
+            <p class="empty-body">
+              Books, tools, and reads that make spending and saving clearer.
+              We&rsquo;re curating the first set now.
+            </p>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .resources {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ab-surface) 70%, transparent) 0%,
+      transparent 100%
+    );
+  }
+
+  .resources-head {
+    max-width: 40rem;
+    margin-bottom: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .resources-head .lede {
+    max-width: 46ch;
+  }
+
+  .disclosure {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--muted-copy);
+  }
+
+  .resource-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .resource-shell {
+    height: 100%;
+    padding: 5px;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--ab-ink) 4%, transparent);
+    border: 1px solid var(--ab-border);
+    transition:
+      transform 400ms var(--ease-spring),
+      box-shadow 400ms var(--ease-spring);
+  }
+
+  .resource-item:hover .resource-shell {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .resource-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: var(--space-4);
+    border-radius: calc(var(--radius-xl) - 4px);
+    background: var(--ab-surface-raised);
+    border: 1px solid var(--ab-border);
+    box-shadow: var(--shadow-inset);
+  }
+
+  .resource-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .resource-type {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ab-accent);
+    background: var(--ab-accent-soft);
+    padding: 5px 10px;
+    border-radius: 999px;
+  }
+
+  .resource-aff {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted-copy);
+  }
+
+  .resource-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .resource-title a {
+    color: var(--ab-ink);
+    text-decoration: none;
+  }
+
+  .resource-title a:hover {
+    color: var(--ab-accent);
+  }
+
+  .resource-author {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--muted-copy);
+    margin: 0;
+  }
+
+  .resource-body {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--muted-copy);
+    line-height: 1.55;
+    margin: 4px 0 0;
+    flex: 1;
+  }
+
+  .resource-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: var(--space-2);
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--ab-accent);
+    text-decoration: none;
+  }
+
+  .resource-cta-icon {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--ab-accent-soft);
+    font-size: 12px;
+    transition: transform 280ms var(--ease-spring);
+  }
+
+  .resource-cta:hover .resource-cta-icon {
+    transform: translate(2px, -1px);
+  }
+
+  .empty-shell {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 5px;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--ab-ink) 4%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--ab-accent) 28%, var(--ab-border-strong));
+  }
+
+  .empty-card {
+    padding: clamp(32px, 5vw, 48px);
+    border-radius: calc(var(--radius-xl) - 4px);
+    background: var(--ab-surface-raised);
+    text-align: center;
+  }
+
+  .empty-kicker {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ab-accent);
+  }
+
+  .empty-title {
+    margin: 0 0 10px;
+    font-size: 1.35rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--ab-ink);
+  }
+
+  .empty-body {
+    margin: 0 auto;
+    max-width: 36ch;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--muted-copy);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 900px) {
+    .resource-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .resource-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,48 +1,110 @@
 ---
+import { site, hasShopUrl } from '../data/site';
+
+const live = hasShopUrl();
+const shopUrl = site.shop.url.trim();
+const mailto = `mailto:${site.contactEmail}?subject=${encodeURIComponent('LGTM / Amor Budget merch')}`;
 ---
 
 <section id="merch" class="section merch">
-  <div class="container merch-card" data-reveal>
-    <h2 class="h2">Amor Budget gear is on its way.</h2>
-    <p class="lede">
-      Shirts, stickers, and a few surprises for people who've paid off a
-      credit card and want to talk about it. Not open yet.
-    </p>
-    <a class="btn btn-primary" href="mailto:baohuylamvu@gmail.com?subject=Amor%20Budget%20merch">
-      Tell me when it's live
-    </a>
+  <div class="container" data-reveal>
+    <div class="merch-shell">
+      <div class="merch-card">
+        <p class="merch-eyebrow">{site.shop.brand}</p>
+        {
+          live ? (
+            <>
+              <h2 class="h2">Merch is live.</h2>
+              <p class="lede">{site.shop.blurb}</p>
+              <a
+                class="btn btn-primary"
+                href={shopUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {site.shop.label}
+                <span class="btn-icon" aria-hidden="true">↗</span>
+              </a>
+            </>
+          ) : (
+            <>
+              <h2 class="h2">Merch is on its way.</h2>
+              <p class="lede">
+                {site.shop.blurb} The shop isn&rsquo;t open yet — leave a note if
+                you want first dibs.
+              </p>
+              <a class="btn btn-primary" href={mailto}>
+                Tell me when it&rsquo;s live
+                <span class="btn-icon" aria-hidden="true">→</span>
+              </a>
+            </>
+          )
+        }
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
+  .merch {
+    padding-top: var(--space-6);
+  }
+
+  .merch-shell {
+    padding: 6px;
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, var(--ab-accent) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ab-accent) 24%, transparent);
+    box-shadow: var(--shadow-soft);
+  }
+
   .merch-card {
-    background: var(--ab-accent);
-    border-radius: 28px;
-    padding: var(--space-6) var(--space-4);
-    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     gap: var(--space-2);
+    padding: clamp(40px, 7vw, 72px) clamp(24px, 5vw, 48px);
+    border-radius: calc(var(--radius-2xl) - 4px);
+    background:
+      radial-gradient(ellipse 80% 70% at 20% 0%, rgba(255, 255, 255, 0.14), transparent 50%),
+      linear-gradient(160deg, #6f8b61 0%, var(--ab-accent) 45%, #4a633f 100%);
+    box-shadow: var(--shadow-inset);
+  }
+
+  .merch-eyebrow {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247, 244, 233, 0.92);
   }
 
   .merch-card .h2 {
     color: var(--ab-accent-on);
-    max-width: 26ch;
+    max-width: 16ch;
   }
 
   .merch-card .lede {
-    color: #ffffff;
-    max-width: 46ch;
-    margin-bottom: var(--space-1);
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 40ch;
+    margin-bottom: var(--space-2);
   }
 
   .merch-card .btn-primary {
     background: var(--ab-accent-on);
     color: var(--ab-accent-hover);
+    box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.35);
+  }
+
+  .merch-card .btn-primary .btn-icon {
+    background: color-mix(in srgb, var(--ab-accent) 14%, white);
+    color: var(--ab-accent-hover);
   }
 
   .merch-card .btn-primary:hover {
     background: #ffffff;
+    box-shadow: 0 16px 32px -12px rgba(0, 0, 0, 0.35);
   }
 </style>
