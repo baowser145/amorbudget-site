@@ -5,14 +5,22 @@
 
 ## Goal
 
-Sell one shirt carrying the Amor Budget logo, at zero fixed cost, linked from the
-Merch section of amorbudget.com.
+Sell one shirt carrying the Amor Budget logo through a Shopify store fulfilled by
+Printify, linked from the Merch section of amorbudget.com.
+
+## Cost note
+
+Basic is $39/mo after the promotional period. At typical print-on-demand margins
+that is roughly 40-50 shirts a year before the store clears its own subscription.
+Flagged, and the user has chosen to proceed. Revisit if the shirt does not sell
+by the time full pricing kicks in.
 
 ## Decisions
 
 | Decision | Choice | Why |
 |---|---|---|
-| Storefront | Printify Pop-Up Store (free) | No monthly fee, no listing or transaction fees. Shopify Basic is $39/mo — roughly 40-50 shirts a year just to break even before the first dollar of profit. Prove demand first. |
+| Storefront | Shopify Basic + Printify app | User's decision. Real storefront and product pages, room to grow. $1/mo for the first 3 months, then $39/mo ($29 annual). The free Printify Pop-Up Store was considered and rejected. |
+| Store domain | Default `*.myshopify.com` | No DNS work, fastest launch. Shopify keeps this address permanently, so pointing `shop.amorbudget.com` at it later is a settings change plus one Cloudflare CNAME, not a migration. |
 | Brand | Amor Budget | The shirt is the app logo; the store should match. LGTM is parked for a possible later dev-humor line. |
 | Garment | Bella+Canvas 3001, forest green | Printify's most common tee, and the one the 4500x5400 print spec is sized around. Green garment reproduces the app icon's look without printing a background box. |
 | Artwork source | Rebuilt as SVG | The only existing logo is a 1024px PNG — about 100 DPI at full-front print size, too soft. The mark is pure geometry, so a vector rebuild is both feasible and reusable. |
@@ -44,7 +52,7 @@ Verify by rendering and comparing side by side, not by eyeballing the code.
 
 `src/data/site.ts`:
 
-- `shop.url` — the live `.printify.me` URL
+- `shop.url` — the live Shopify store URL
 - `shop.brand` — `LGTM` becomes `Amor Budget`
 - `shop.label` — `Shop LGTM` becomes `Shop merch`
 - `shop.blurb` — rewrite; currently references LGTM as a separate crew
@@ -53,24 +61,45 @@ Verify by rendering and comparing side by side, not by eyeballing the code.
 from the "coming soon" mailto state to a live shop button. That conditional is
 the entire mechanism.
 
+## Store setup
+
+Printify connects to Shopify by installing the Printify app from the Shopify App
+Store and authorizing it; the Shopify store then appears in the Printify
+dashboard, and products created in Printify sync across with images, description,
+and price.
+
+Order of operations:
+
+1. Shopify account and store created (3-day trial, checkout disabled)
+2. Start the $1/mo subscription — required before the store can take an order
+3. Install the Printify app, authorize the connection
+4. Build the product in Printify from the print file, publish to Shopify
+5. Payments, refund and shipping policies, store name configured in Shopify
+6. Copy the live product or store URL back into `site.ts`
+
 ## Division of labor
 
-**Claude:** SVG rebuild, print-ready PNG export, product title/description copy,
-all `site.ts` edits, favicon replacement, build verification.
+**Claude:** SVG rebuild, print-ready PNG export, product title and description
+copy, store copy (tagline, about, policy starting points), all `site.ts` edits,
+favicon replacement, build verification.
 
-**User:** Create the Printify account (email verification), create the Pop-Up
-Store, upload the print file, set the retail price, publish, hand back the live
-URL. Payment and payout details are the user's alone.
+**User:** Create the Shopify account and the Printify account, both requiring
+email verification. Start the paid subscription. Install and authorize the
+Printify app. Upload the print file, pick the garment colorway, set retail price,
+publish. Configure payments and payouts — these are the user's alone and Claude
+should not touch them.
 
-The handoff point is the `.printify.me` URL. Everything on the Claude side can be
-finished before the account exists; only the final `shop.url` value waits on it.
+The handoff point is the live store URL. Everything on the Claude side can be
+finished before either account exists; only the final `shop.url` value waits on
+it.
 
 ## Out of scope
 
-- Shopify (revisit only if the shirt sells)
 - More than one product or colorway
-- Custom domain for the store — Pop-Up Stores use `*.printify.me`
+- Custom domain — deferred, `*.myshopify.com` for now
 - Payment, tax, or payout configuration
+- Shopify theme customization beyond what ships by default
+- Embedding Shopify Buy Buttons in the Astro site; Merch links out
 
 ## Acceptance criteria
 
