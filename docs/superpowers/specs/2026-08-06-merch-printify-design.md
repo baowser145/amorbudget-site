@@ -57,10 +57,20 @@ Verify by rendering and comparing side by side, not by eyeballing the code.
 - `shop.label` — `Shop LGTM` becomes `Shop merch`
 - `shop.blurb` — rewrite; currently references LGTM as a separate crew
 
-`src/pages/merch.astro` is a real page on our own site, not a Shopify embed.
-Shopify cannot serve `amorbudget.com/merch` — subdomains only — so Astro owns
-the URL and the design, and Shopify owns checkout. `product.url` empty puts the
-page in a "not open yet" state rather than shipping a dead Buy button.
+`/merch` is a real catalog on our own site, not a Shopify embed. Shopify cannot
+serve `amorbudget.com/merch` — subdomains only — so Astro owns the URL and the
+design, and Shopify owns checkout.
+
+- `src/data/products.ts` — the catalog. Adding a product is one entry plus
+  mockups in `public/merch/`; no component edits.
+- `src/pages/merch/index.astro` — grid. Uses `auto-fill`, not `auto-fit`, so a
+  single product does not stretch across the full width and look broken. A
+  "next drop" tile fills the grid honestly below 4 products and removes itself
+  above that.
+- `src/pages/merch/[slug].astro` — product page, generated per product.
+
+An empty `url` puts a product in its "not yet" state rather than shipping a dead
+Buy button, so a design can exist on the site before its Shopify listing does.
 
 `Merch.astro` on the homepage becomes a teaser linking to `/merch`. The live vs
 coming-soon split lives on `/merch` alone, so there is one place to be right

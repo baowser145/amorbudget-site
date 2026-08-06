@@ -21,37 +21,6 @@ export const site = {
   },
 
   /**
-   * The single product on /merch. Add more only when there is more than one
-   * thing to sell — a one-product array is worse than a one-product object.
-   *
-   * `url` is the direct Shopify product page; leaving it empty puts /merch in
-   * its "not yet" state instead of shipping a dead Buy button.
-   *
-   * `images` are paths under public/. Export mockups from Printify and drop
-   * them in public/merch/. Empty renders a placeholder frame, not a broken img.
-   */
-  product: {
-    url: '',
-    eyebrow: 'Launch edition',
-    name: 'Amor Budget v1 Tee',
-    // PLACEHOLDER — set this to the real Shopify retail price.
-    price: '$34',
-    blurb:
-      'Amor Budget v1 shipped. This shirt marks it. Garment-dyed heavyweight cotton that keeps fading and softening the longer you own it.',
-    images: [] as { src: string; alt: string }[],
-    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
-    specs: [
-      '100% cotton',
-      '6.0 oz./yd.² (203.4 g/m²)',
-      'Relaxed fit',
-      'Garment-dyed for a vintage finish',
-      'Wide rib collar',
-      'American Apparel 1301GD',
-    ],
-    note: 'Every shirt takes the dye a little differently, so yours will vary slightly from the photo. That is the finish doing its job, not a flaw.',
-  },
-
-  /**
    * Affiliate setup for Recommended Resources.
    * After you join Amazon Associates (or another network), either:
    *   1. Put full affiliate URLs on each resource in resources.ts, or
@@ -63,14 +32,9 @@ export const site = {
   },
 } as const;
 
-/** True when Merch should open the external store. */
+/** True when the Shopify storefront link is configured. */
 export function hasShopUrl(): boolean {
   return Boolean(site.shop.url?.trim());
-}
-
-/** True when /merch can show a working Buy button. */
-export function hasProductUrl(): boolean {
-  return Boolean(site.product.url?.trim());
 }
 
 /**

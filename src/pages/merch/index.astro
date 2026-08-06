@@ -1,0 +1,140 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products } from '../../data/products';
+import { site } from '../../data/site';
+
+/*
+ * The "next drop" tile is not a fake product. It fills the grid honestly
+ * while the catalog is small, and disappears on its own once there are
+ * enough real products to carry the layout.
+ */
+const showNextDrop = products.length < 4;
+const mailto =
+  'mailto:' +
+  site.contactEmail +
+  '?subject=' +
+  encodeURIComponent('Amor Budget merch');
+---
+
+<Layout
+  title="Merch — Amor Budget"
+  description="Garment-dyed tees and everyday gear from Amor Budget. Printed on demand, shipped worldwide."
+>
+  <Nav />
+  <main class="shop">
+    <div class="container">
+      <header class="shop-head" data-reveal>
+        <p class="eyebrow">Merch</p>
+        <h1 class="h1">Wear the budget.</h1>
+        <p class="lede">
+          Heavyweight cotton, quiet graphics, nothing you have to explain. Each
+          piece is printed on demand, so nothing sits in a warehouse waiting to
+          be thrown out.
+        </p>
+      </header>
+
+      <div class="grid" data-reveal>
+        {products.map((product) => <ProductCard product={product} />)}
+
+        {
+          showNextDrop && (
+            <div class="next">
+              <div class="next-inner">
+                <p class="next-eyebrow">Next drop</p>
+                <p class="next-copy">
+                  More designs are in progress. Want a say in what gets printed?
+                </p>
+                <a class="next-link" href={mailto}>
+                  Tell me what you&rsquo;d wear
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .shop {
+    padding: var(--space-5) 0 var(--space-7);
+  }
+
+  .shop-head {
+    max-width: 46ch;
+    margin-bottom: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  /*
+   * auto-fill, not auto-fit: with a single product, auto-fit would stretch
+   * one card across the full width and look broken. auto-fill holds the
+   * column size so the catalog reads the same at 1 product or at 8.
+   */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 30%, 340px), 1fr));
+    gap: clamp(24px, 3vw, 40px);
+  }
+
+  .next {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .next-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    padding: clamp(20px, 3vw, 32px);
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--ab-border-strong);
+    background: color-mix(in srgb, var(--ab-accent-soft) 40%, transparent);
+  }
+
+  .next-eyebrow {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ab-accent);
+  }
+
+  .next-copy {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--muted-copy);
+    text-wrap: pretty;
+  }
+
+  .next-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--ab-accent);
+    text-decoration: none;
+  }
+
+  .next-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

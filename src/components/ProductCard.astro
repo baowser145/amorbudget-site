@@ -1,0 +1,104 @@
+---
+import type { Product } from '../data/products';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const hero = product.images[0];
+---
+
+<a class="card" href={`/merch/${product.slug}`}>
+  <div class="card-media">
+    {
+      hero ? (
+        <img src={hero.src} alt={hero.alt} width="900" height="900" loading="lazy" />
+      ) : (
+        <div class="card-empty" aria-hidden="true" />
+      )
+    }
+  </div>
+  <div class="card-body">
+    <p class="card-eyebrow">{product.eyebrow}</p>
+    <h2 class="card-name">{product.name}</h2>
+    <p class="card-tagline">{product.tagline}</p>
+    <p class="card-price">From {product.priceFrom}</p>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radius-lg);
+    transition: transform 320ms var(--ease-spring);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+  }
+
+  .card-media {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--ab-surface);
+    border: 1px solid var(--ab-border);
+  }
+
+  .card-media img,
+  .card-empty {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .card-empty {
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 35%, rgba(255, 255, 255, 0.7), transparent 60%),
+      var(--ab-bg-deep);
+  }
+
+  .card:hover .card-media img {
+    transform: scale(1.03);
+  }
+
+  .card-body {
+    padding: var(--space-2) 2px 0;
+  }
+
+  .card-eyebrow {
+    margin: 0 0 4px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ab-accent);
+  }
+
+  .card-name {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ab-ink);
+  }
+
+  .card-tagline {
+    margin: 4px 0 0;
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: var(--muted-copy);
+  }
+
+  .card-price {
+    margin: 8px 0 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ab-ink);
+  }
+</style>

@@ -1,30 +1,43 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
-import { site, hasProductUrl } from '../data/site';
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { products, isLive, type Product } from '../../data/products';
+import { site } from '../../data/site';
 
-const p = site.product;
-const live = hasProductUrl();
-const buyHref = p.url.trim();
-// Kept flat on purpose: a nested multi-line template literal here makes the
-// Astro compiler lose the frontmatter fence and emit it as page text.
-const mailSubject = encodeURIComponent(p.name + ' interest');
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const live = isLive(product);
+const buyHref = product.url.trim();
+
+// Kept flat: a nested multi-line template literal in frontmatter makes the
+// Astro compiler lose the fence and emit it as page text.
+const mailSubject = encodeURIComponent(product.name + ' interest');
 const mailto = 'mailto:' + site.contactEmail + '?subject=' + mailSubject;
-const hero = p.images[0];
+const hero = product.images[0];
+const others = products.filter((p) => p.slug !== product.slug);
 ---
 
-<Layout
-  title={`${p.name} — Amor Budget`}
-  description={p.blurb}
->
+<Layout title={product.name + ' — Amor Budget'} description={product.blurb}>
   <Nav />
   <main class="merch-page">
     <div class="container">
       <nav class="crumb" aria-label="Breadcrumb">
         <a href="/">Amor Budget</a>
         <span aria-hidden="true">/</span>
-        <span aria-current="page">Merch</span>
+        <a href="/merch">Merch</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{product.name}</span>
       </nav>
 
       <article class="product">
@@ -39,9 +52,9 @@ const hero = p.images[0];
             )
           }
           {
-            p.images.length > 1 && (
+            product.images.length > 1 && (
               <ul class="thumbs">
-                {p.images.slice(1).map((img) => (
+                {product.images.slice(1).map((img) => (
                   <li>
                     <img src={img.src} alt={img.alt} width="300" height="300" loading="lazy" />
                   </li>
@@ -52,15 +65,18 @@ const hero = p.images[0];
         </div>
 
         <div class="product-info" data-reveal>
-          <p class="eyebrow">{p.eyebrow}</p>
-          <h1 class="h1 product-name">{p.name}</h1>
-          <p class="price">{p.price}</p>
-          <p class="lede">{p.blurb}</p>
+          <p class="eyebrow">{product.eyebrow}</p>
+          <h1 class="h1 product-name">{product.name}</h1>
+          <p class="price">
+            From {product.priceFrom}
+            <span class="price-note">larger sizes priced up</span>
+          </p>
+          <p class="lede">{product.blurb}</p>
 
           <div class="sizes">
             <h2 class="label">Sizes</h2>
             <ul class="size-list">
-              {p.sizes.map((s) => <li>{s}</li>)}
+              {product.sizes.map((s) => <li>{s}</li>)}
             </ul>
           </div>
 
@@ -72,7 +88,7 @@ const hero = p.images[0];
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Buy on Shopify
+                Buy this shirt
                 <span class="btn-icon" aria-hidden="true">↗</span>
               </a>
             ) : (
@@ -87,19 +103,37 @@ const hero = p.images[0];
             {
               live
                 ? 'Checkout and shipping are handled by Shopify. Printed on demand, so nothing sits in a warehouse.'
-                : 'The shop isn’t open yet. Leave a note and you’ll hear first.'
+                : 'This one isn’t on sale yet. Leave a note and you’ll hear first.'
             }
           </p>
 
           <div class="details">
             <h2 class="label">Details</h2>
             <ul class="spec-list">
-              {p.specs.map((s) => <li>{s}</li>)}
+              {product.specs.map((s) => <li>{s}</li>)}
             </ul>
-            <p class="note">{p.note}</p>
+            {product.note && <p class="note">{product.note}</p>}
           </div>
         </div>
       </article>
+
+      {
+        others.length > 0 && (
+          <section class="more" data-reveal>
+            <h2 class="label">More from Amor Budget</h2>
+            <ul class="more-list">
+              {others.map((p) => (
+                <li>
+                  <a href={`/merch/${p.slug}`}>
+                    <span class="more-name">{p.name}</span>
+                    <span class="more-price">From {p.priceFrom}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
     </div>
   </main>
   <Footer />
@@ -107,9 +141,8 @@ const hero = p.images[0];
 
 <style>
   /*
-   * Deliberately quieter than the marketing page. No shells, no gradients,
-   * no film-grain-fighting surfaces — a product page earns attention by
-   * getting out of the product's way.
+   * Deliberately quieter than the marketing page. No shells, no gradients —
+   * a product page earns attention by getting out of the product's way.
    */
   .merch-page {
     padding: var(--space-5) 0 var(--space-7);
@@ -118,6 +151,7 @@ const hero = p.images[0];
   .crumb {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
     margin-bottom: var(--space-4);
     font-size: 13px;
@@ -206,11 +240,22 @@ const hero = p.images[0];
   }
 
   .price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
     margin: 0;
     font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--ab-ink);
+  }
+
+  .price-note {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--ab-faint);
   }
 
   .label {
@@ -300,6 +345,49 @@ const hero = p.images[0];
     color: var(--ab-faint);
   }
 
+  /* ---------- more ---------- */
+
+  .more {
+    margin-top: var(--space-7);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--ab-border);
+  }
+
+  .more-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .more-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    background: var(--ab-surface-raised);
+    border: 1px solid var(--ab-border);
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 15px;
+    transition: border-color 220ms var(--ease-spring), transform 220ms var(--ease-spring);
+  }
+
+  .more-list a:hover {
+    border-color: color-mix(in srgb, var(--ab-accent) 40%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .more-price {
+    color: var(--ab-faint);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
   @media (max-width: 860px) {
     .product {
       grid-template-columns: 1fr;
@@ -308,10 +396,6 @@ const hero = p.images[0];
 
     .product-media {
       position: static;
-    }
-
-    .buy {
-      align-self: stretch;
     }
   }
 </style>
