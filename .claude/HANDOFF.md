@@ -1,81 +1,64 @@
-# Session Handoff — amorbudget-site — 2026-07-28T19:20:00-05:00
+# Session Handoff — amorbudget-site — 2026-08-03T20:01:00-05:00
 
 ## One-Line Status
-Marketing site is live at amorbudget.com and mobile-nav/hero bugs reported from a real phone are fixed and deployed; still mid-rebrand of the icon mark (heart + growth-arrow, replacing heart+coin) — the mark is confirmed and already applied to the Printful shirt design, but the app icon, site nav icon, and OG image regeneration are still pending.
+Site is live and stable on www.amorbudget.com with nothing in flight; this session opened a new backend workstream — wiring Resend into Supabase auth emails for the Amor Budget app — which is fully mapped out but blocked on the user creating the Resend account and connecting it.
 
 ## Project Path
 /Users/vubl/projects/amorbudget-site
-(sibling repo to /Users/vubl/projects/amor-budget, the native app this site markets)
+(sibling repo to /Users/vubl/projects/amor-budget, the native app this site markets; the Resend/Supabase work targets the app's backend, not this repo)
 
 ## Phase
-ship — icon rebrand in progress, step 2 of 3 (shirt done; app/site icon assets not started). Mobile bug-fix cycle just completed and verified live.
+ship — site is stable, no code changes this session. Active work is account setup and configuration (Resend → Supabase SMTP), plus the carried-over content gaps (Resources, Shopify).
 
 ## Roast Verdict
 N/A — not a `/create-new-project` pipeline session.
 
 ## Decisions Made
-- **New repo, not folded into amor-budget.** Different stack (Astro vs Ionic/Capacitor) and deploy target (Vercel vs App Store).
-- **Reuse amor-budget's exact brand tokens** (Olive & Blush palette, self-hosted Nunito) rather than a new identity via brandkit.
-- **Astro over Next.js/Vite+React** — zero-config static output, near-zero JS by default.
-- **Merch stays a "coming soon" teaser for now**, not a wired storefront — Printful store connection/billing still outstanding.
-- **Printful (not Printify) for merch**, DTG printing (not embroidery). Public storefront eventually, not a personal one-off.
-- **Icon redesign: heart + upward growth-arrow**, olive outline (`--ab-accent` #5F7A52) + gold arrow (`--ab-gold` #D9B44A) — gold already means "savings/growth" elsewhere in the app.
-- **Heart geometry reused verbatim from the user's own prior DesignSync work** (project `a06787d6-8087-4ce2-abbf-a6e45c064cef`, section `28a`), not re-derived by hand — two earlier freehand attempts were rejected first. Canonical path data is in the previous handoff entry / still valid, repeated below.
-- **No "Get notified" CTAs anywhere on the site** (new this session, user's direct instruction after seeing it on their phone) — replaced with a plain, non-interactive "Coming soon" text label in both the nav and the hero. Don't re-add an email-capture CTA without the user asking again.
-- **Mobile nav keeps all three links visible** (Features/Screenshots/Merch) instead of hiding them below 640px — the old mobile CSS hid every text link and showed only the "Get notified" button, which is why the user couldn't find Merch on their phone. Fixed by tightening gap/font-size at the mobile breakpoint rather than hiding content.
+- **Resend is the email provider for Supabase auth emails** (signup confirmation, magic links, password reset), sending from `@amorbudget.com`. Free tier (3k emails/month) is sufficient.
+- **Recommended path is Resend's official Supabase integration** (Resend → Settings → Integrations → Supabase → Connect), which auto-configures SMTP after OAuth, over manual SMTP entry. Manual fallback documented below in case the integration path fails.
+- **Credential steps stay with the user** — account creation and API-key entry are theirs; Claude verifies afterward (DNS via dig, Supabase logs/advisors, test send).
 
 ## What's Built
-- **amorbudget-site repo** (github.com/baowser145/amorbudget-site, public) — Astro site, 5 commits (`c7a13df` scaffold, `d6ff18c` contrast fix, `37e0762` modernize, `c77d19a` editorial-confidence pass, `cdeb205` mobile nav/hero CTA fix). **Live at https://amorbudget.com** (Vercel, DNS via Cloudflare).
-- **Site sections**: floating pill nav (brand + Features/Screenshots/Merch links, no CTA button anymore), Hero (bolder type, heart-icon watermark, accent-colored keyword, tilt-on-hover phone mockup, "See how it works" button + plain "Coming soon" text), Features (asymmetric bento layout), Screenshots (full-bleed dark "peak" section), Merch (teaser CTA — this one still says "Tell me when it's live", untouched by this round's CTA removal since the user's complaint was specifically about "Get notified"), Footer.
-- **Accessibility**: `--muted-copy` (#6A6E5A, 4.95:1) and `--muted-on-ink` (#B7BCA8, 7.1:1) added since the app's own `--ab-muted`/`--ab-faint` read below 4.5:1 at marketing-copy sizes.
-- **Motion**: scroll-reveal via IntersectionObserver, gated behind a `.js` class so content stays visible if JS fails.
-- **Icon mark, confirmed direction**: heart outline + growth arrow, olive/gold, from DesignSync section 28a's exact SVG path (below). Print-ready transparent PNG already uploaded and placed on the Printful shirt design (old opaque coin-version layer deleted).
-- **Printful**: account created by the user; store connection and billing setup are still outstanding (both are the user's own steps — account/payment actions).
-- **NOT yet done**: regenerating `amor-budget`'s actual `resources/icon.png` (+ derived favicons + iOS app icon) with the new heart+arrow mark, or updating this site's own nav icon/OG image to match. The site's nav icon and the hero's phone-mockup screenshot still show the OLD heart+coin design.
+Nothing changed in this repo this session — see git log (`d34890c` is still HEAD, main in sync with origin except the two uncommitted `.claude/` doc files). Site state carried over from Aug 2:
+- **Nav / App spotlight / social cards** — done, deployed, verified live.
+- **Resources section** — SHELL ONLY, live placeholder; `src/data/resources.ts` empty, `site.affiliate.amazonTag` empty.
+- **Merch section** — coming-soon; `site.shop.url` empty, waiting on Shopify.
 
-## The icon's source SVG (canonical — reuse this, don't re-derive)
-```svg
-<!-- heart outline, viewBox 0 0 100 100 -->
-<path d="M46 84 C27 69 14 55 14 39.5 C14 28.5 22 20.5 31.5 20.5 C37.5 20.5 42.6 23.8 46 30 C49.4 23.8 54.5 20.5 60.5 20.5 C70 20.5 78 28.5 78 39.5 C78 55 65 69 46 84 Z"
-      stroke="#5f7a52" stroke-width="5.5" stroke-linejoin="round" fill="none" />
-<!-- growth-arrow zigzag + corner-bracket arrowhead -->
-<path d="M16 73 L38 51 L44 57 L86 16 M73 16 L86 16 L86 29"
-      stroke="#d9b44a" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-```
-Stroke widths scale up slightly at smaller physical render sizes (5.5 at ~150px tile, 6 at 64px, 6.5 at 44px — confirmed legible down to 44px). For a solid-color tile background (app icon convention), add a background-color cutout stroke (width ~11, same path, drawn under the gold) so the arrow reads cleanly crossing the heart line. For transparent-background exports (print, OG image), use an SVG `<mask>` instead of a literal colored stroke.
+New this session (knowledge, not code):
+- **Supabase projects identified**: "Amor Budget" ref `iyxnvffjxpqwnqktgclr` (us-east-2, ACTIVE_HEALTHY) and "JustMenu" ref `bzhmlmxibcuaubxbwveo` (created Aug 1) — same org. SMTP is configured per project; one Resend account can serve both.
+- **DNS confirmed on Cloudflare** (leia/vern nameservers), no existing MX or TXT records on the apex — clean slate for Resend's DKIM/return-path records. Records must be DNS-only (grey cloud).
+- **Full setup guide delivered to the user**: verify amorbudget.com in Resend (Cloudflare auto-config button exists) → connect via Supabase integration OR manual SMTP (host `smtp.resend.com`, port 465, username `resend`, password = API key, sender `noreply@amorbudget.com`) → raise Supabase email rate limit (built-in mailer caps ~2/hr) at Auth → Rate Limits → customize templates at Auth → Email Templates → test signup.
 
 ## Verification Status
-- `npm run build` — PASS after every round of changes this session, including the mobile fix.
-- Mechanical design detector (`impeccable`'s `detect.mjs`) — zero findings throughout.
-- Mobile fix specifically verified in-browser at ~500px and ~340px-requested viewports (Chrome automation's resize tool is unreliable on reused tabs in this environment — opening a fresh tab before resizing made it work; noting this in case it recurs) — confirmed Features/Screenshots/Merch all visible in nav, no phantom "Get notified" button, "Coming soon" reads as plain non-interactive text next to the hero's real button.
-- **Live-site confirmed post-deploy**: `curl`'d amorbudget.com after the push, saw stale content briefly (`x-vercel-cache: MISS` but old HTML — deploy still building), waited ~60s via a scheduled wakeup, re-checked, confirmed 0 occurrences of "Get notified" and "Coming soon" present; loaded the live URL in-browser at mobile width and visually confirmed.
+- Last verification: **PASS** (2026-08-02) — site build, responsive nav, spotlight, live social-card checks. Nothing to verify this session (no code changed). No `.claude/build-log.md` exists; verification has been inline.
 
 ## Active Goals
-- Finish the icon rebrand across all three surfaces: app (regenerate `resources/icon.png` etc.), this site (nav icon, OG image), merch (done).
-- Get the Printful store connected and billing set up (both need the user directly).
+- Get Resend connected to the Amor Budget Supabase project so auth emails send from `@amorbudget.com`, then verify end-to-end.
+- Populate Resources with real books/tools so the live placeholder goes away.
+- Get the Shopify storefront connected so Merch can go live.
 
 ## Open Blockers
-- **Printful store not connected yet**, billing not set up — both require the user's direct action (account/payment details).
-- **amor-budget's own icon.png/favicons still show the old heart+coin mark** — separate repo (`/Users/vubl/projects/amor-budget`), whose own `.claude/HANDOFF.md` has an unrelated, still-open blocker (Google Sign-In uncommitted, waiting on phone reconnect) that this thread hasn't touched — don't conflate the two.
+- **Resend setup needs the user**: create the account, verify the `amorbudget.com` domain (DNS records via Cloudflare auto-config), and run the Supabase integration connect (or paste the API key into Supabase SMTP settings). Claude cannot do credential entry.
+- **Ambiguity unresolved**: "then do the supabase auth" may also mean building/finishing sign-in flows in the amor-budget app itself — the user hasn't clarified. Ask when they return.
+- **Resources content needs the user** — actual book/tool picks and Amazon Associates tag.
+- **Shopify store not connected** — no URL for `site.shop.url`. (Merch is Shopify/LGTM, not Printful; old notes stale.)
+- **Known-but-unfixed, low severity**: resource cards render two links to the same URL (title + "View"); latent while `resources` is empty; fix in the same pass that populates data.
 
 ## Next 3 Actions (in order)
-1. Ask the user whether to proceed now with regenerating the app icon assets (amor-budget's `resources/icon.png`, `public/favicon.png`, `public/icon-512.png`, iOS `AppIcon` asset catalog) using the canonical SVG above.
-2. Once the app icon is regenerated, update this site's `Nav.astro` icon image and add/update an Open Graph image using the same mark.
-3. Check back on Printful account setup (store connection + billing) — needs the user directly.
+1. Commit and push the two modified `.claude/` docs (HANDOFF.md, PROJECT.md) to origin/main — they've been sitting uncommitted since the Aug 2 session end and now carry this session's update too. (`.claude` changes don't affect the Vercel build.)
+2. When the user reports Resend steps done (or asks to continue): verify domain DNS resolved (`dig TXT resend._domainkey.amorbudget.com`, `dig MX send.amorbudget.com`), confirm custom SMTP is active on project `iyxnvffjxpqwnqktgclr`, have them (or the app) trigger a test signup, then check Supabase auth logs and run `get_advisors` for auth-config warnings. Also raise the email rate limit and offer to restyle the default email templates. If they meant app-side auth flows too, scope that in `/Users/vubl/projects/amor-budget`.
+3. Carried over: populate Resources (needs the user's picks + Amazon tag; fix the duplicate-link a11y nit in the same pass) and flip Merch live once a Shopify URL exists (`site.shop.url`).
 
 ## Resume Prompt
 Copy-paste this into a fresh session:
 
-> Read `.claude/HANDOFF.md` in /Users/vubl/projects/amorbudget-site, then continue from "Next 3 Actions" item 1. Do not re-ask intake questions or re-derive the heart+arrow icon geometry — the canonical SVG path data is in this file's "The icon's source SVG" section, sourced from the user's own DesignSync work (project a06787d6-8087-4ce2-abbf-a6e45c064cef, section 28a). The site is live at amorbudget.com, the mobile nav/CTA bugs the user reported from their phone are fixed and confirmed live, and the Printful shirt design is done. What's left: regenerate amor-budget's actual app icon/favicons with the new mark, update this site's nav icon/OG image to match, then follow up on Printful's store-connection and billing steps (both need the user directly).
+> Read `.claude/HANDOFF.md` and `.claude/PROJECT.md` in /Users/vubl/projects/amorbudget-site, then continue from "Next 3 Actions" item 1. Current phase: ship (site stable; active work is Resend→Supabase auth email setup, blocked on my account steps). Do not re-ask intake questions, do not redo the icon rebrand (explicitly dropped), do not re-review Grok's redesign (complete, bugs fixed, deployed). The Supabase project for Amor Budget is ref `iyxnvffjxpqwnqktgclr`; the Resend setup guide was already delivered — pick up at verification, not re-explanation.
 
-## Files Touched This Session (this fork)
+## Files Touched This Session
 ```
-amorbudget-site/ — commit cdeb205 "Fix mobile nav and hero CTA"
-  src/components/Nav.astro   — removed "Get notified" button; mobile media query no
-                               longer hides Features/Screenshots/Merch, just tightens
-                               gap/font-size instead
-  src/components/Hero.astro — removed "Get notified at launch" mailto button;
-                               hero-actions now has "See how it works" + a plain
-                               static "Coming soon" text label
-  .claude/HANDOFF.md, .claude/PROJECT.md — added in a prior fork, present in this commit
+No source files changed. Only session-state docs:
+  .claude/HANDOFF.md  — overwritten with this handoff (was already modified,
+                        uncommitted, from Aug 2 session end)
+  .claude/PROJECT.md  — Current Status updated with Resend/Supabase workstream
+                        (also previously modified, uncommitted)
 ```

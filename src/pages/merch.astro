@@ -1,0 +1,317 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site, hasProductUrl } from '../data/site';
+
+const p = site.product;
+const live = hasProductUrl();
+const buyHref = p.url.trim();
+// Kept flat on purpose: a nested multi-line template literal here makes the
+// Astro compiler lose the frontmatter fence and emit it as page text.
+const mailSubject = encodeURIComponent(p.name + ' interest');
+const mailto = 'mailto:' + site.contactEmail + '?subject=' + mailSubject;
+const hero = p.images[0];
+---
+
+<Layout
+  title={`${p.name} — Amor Budget`}
+  description={p.blurb}
+>
+  <Nav />
+  <main class="merch-page">
+    <div class="container">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Amor Budget</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Merch</span>
+      </nav>
+
+      <article class="product">
+        <div class="product-media" data-reveal>
+          {
+            hero ? (
+              <img class="shot" src={hero.src} alt={hero.alt} width="1200" height="1200" />
+            ) : (
+              <div class="shot shot-empty">
+                <span>Product photo coming</span>
+              </div>
+            )
+          }
+          {
+            p.images.length > 1 && (
+              <ul class="thumbs">
+                {p.images.slice(1).map((img) => (
+                  <li>
+                    <img src={img.src} alt={img.alt} width="300" height="300" loading="lazy" />
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+        </div>
+
+        <div class="product-info" data-reveal>
+          <p class="eyebrow">{p.eyebrow}</p>
+          <h1 class="h1 product-name">{p.name}</h1>
+          <p class="price">{p.price}</p>
+          <p class="lede">{p.blurb}</p>
+
+          <div class="sizes">
+            <h2 class="label">Sizes</h2>
+            <ul class="size-list">
+              {p.sizes.map((s) => <li>{s}</li>)}
+            </ul>
+          </div>
+
+          {
+            live ? (
+              <a
+                class="btn btn-primary buy"
+                href={buyHref}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Buy on Shopify
+                <span class="btn-icon" aria-hidden="true">↗</span>
+              </a>
+            ) : (
+              <a class="btn btn-primary buy" href={mailto}>
+                Tell me when it&rsquo;s live
+                <span class="btn-icon" aria-hidden="true">→</span>
+              </a>
+            )
+          }
+
+          <p class="fulfilment">
+            {
+              live
+                ? 'Checkout and shipping are handled by Shopify. Printed on demand, so nothing sits in a warehouse.'
+                : 'The shop isn’t open yet. Leave a note and you’ll hear first.'
+            }
+          </p>
+
+          <div class="details">
+            <h2 class="label">Details</h2>
+            <ul class="spec-list">
+              {p.specs.map((s) => <li>{s}</li>)}
+            </ul>
+            <p class="note">{p.note}</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /*
+   * Deliberately quieter than the marketing page. No shells, no gradients,
+   * no film-grain-fighting surfaces — a product page earns attention by
+   * getting out of the product's way.
+   */
+  .merch-page {
+    padding: var(--space-5) 0 var(--space-7);
+  }
+
+  .crumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--space-4);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ab-faint);
+  }
+
+  .crumb a {
+    color: var(--ab-faint);
+    text-decoration: none;
+    transition: color 220ms var(--ease-spring);
+  }
+
+  .crumb a:hover {
+    color: var(--ab-accent);
+  }
+
+  .product {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(32px, 6vw, 88px);
+    align-items: start;
+  }
+
+  /* ---------- media ---------- */
+
+  .product-media {
+    position: sticky;
+    top: 104px;
+  }
+
+  .shot {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    background: var(--ab-surface);
+    border: 1px solid var(--ab-border);
+  }
+
+  .shot-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ab-bg-deep);
+    border-style: dashed;
+    border-color: var(--ab-border-strong);
+    color: var(--ab-faint);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    gap: 10px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .thumbs img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--ab-border);
+    background: var(--ab-surface);
+  }
+
+  /* ---------- info ---------- */
+
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding-top: var(--space-1);
+  }
+
+  .product-name {
+    /* Smaller than a marketing h1 — this is a label, not a headline. */
+    font-size: clamp(2.1rem, 4vw, 3.1rem);
+  }
+
+  .price {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ab-ink);
+  }
+
+  .label {
+    margin: 0 0 10px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ab-faint);
+  }
+
+  .sizes {
+    margin-top: var(--space-1);
+  }
+
+  .size-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .size-list li {
+    min-width: 46px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: var(--ab-surface-raised);
+    border: 1px solid var(--ab-border-strong);
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    color: var(--ab-ink);
+  }
+
+  .buy {
+    margin-top: var(--space-2);
+    align-self: stretch;
+  }
+
+  .fulfilment {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ab-faint);
+  }
+
+  .details {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--ab-border);
+    width: 100%;
+  }
+
+  .spec-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .spec-list li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 15px;
+    color: var(--muted-copy);
+  }
+
+  .spec-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--ab-accent);
+  }
+
+  .note {
+    margin: var(--space-2) 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ab-faint);
+  }
+
+  @media (max-width: 860px) {
+    .product {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .product-media {
+      position: static;
+    }
+
+    .buy {
+      align-self: stretch;
+    }
+  }
+</style>

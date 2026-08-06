@@ -1,28 +1,25 @@
 ---
 import { Image } from 'astro:assets';
 import appIcon from '../assets/app-icon.png';
-import { site, hasShopUrl } from '../data/site';
 
-const shopLive = hasShopUrl();
-const merchHref = shopLive ? site.shop.url.trim() : '#merch';
-const merchExternal = shopLive;
-
+/*
+ * Root-relative hashes, not bare ones: these anchors have to work from
+ * /merch too, where a bare "#features" points at nothing. On the homepage
+ * the browser still treats "/#features" as a same-document fragment, so
+ * smooth scrolling is unaffected.
+ */
 const links = [
-  { href: '#features', label: 'Features' },
-  { href: '#screenshots', label: 'App' },
-  { href: '#resources', label: 'Resources' },
-  {
-    href: merchHref,
-    label: 'Merch',
-    external: merchExternal,
-  },
+  { href: '/#features', label: 'Features' },
+  { href: '/#screenshots', label: 'App' },
+  { href: '/#resources', label: 'Resources' },
+  { href: '/merch', label: 'Merch' },
 ];
 ---
 
 <header class="nav">
   <div class="container nav-wrap">
     <div class="nav-island">
-      <a href="#top" class="nav-brand">
+      <a href="/" class="nav-brand">
         <Image src={appIcon} alt="" width={34} height={34} class="nav-icon" />
         <span class="nav-brand-text">Amor Budget</span>
       </a>
@@ -41,7 +38,7 @@ const links = [
         }
       </nav>
 
-      <a class="nav-cta btn btn-primary btn-plain" href="#screenshots">See the app</a>
+      <a class="nav-cta btn btn-primary btn-plain" href="/#screenshots">See the app</a>
     </div>
   </div>
 </header>

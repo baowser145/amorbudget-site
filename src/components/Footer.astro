@@ -1,17 +1,16 @@
 ---
 import { Image } from 'astro:assets';
 import appIcon from '../assets/app-icon.png';
-import { site, hasShopUrl } from '../data/site';
+import { site } from '../data/site';
 
 const year = new Date().getFullYear();
-const shopLive = hasShopUrl();
 ---
 
 <footer class="footer">
   <div class="container footer-shell">
     <div class="footer-card">
       <div class="footer-top">
-        <a href="#top" class="footer-brand">
+        <a href="/" class="footer-brand">
           <Image src={appIcon} alt="" width={36} height={36} class="footer-icon" />
           <div>
             <p class="footer-name">{site.name}</p>
@@ -19,22 +18,10 @@ const shopLive = hasShopUrl();
           </div>
         </a>
         <nav class="footer-nav" aria-label="Footer">
-          <a href="#features">Features</a>
-          <a href="#screenshots">App</a>
-          <a href="#resources">Resources</a>
-          {
-            shopLive ? (
-              <a
-                href={site.shop.url.trim()}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Merch
-              </a>
-            ) : (
-              <a href="#merch">Merch</a>
-            )
-          }
+          <a href="/#features">Features</a>
+          <a href="/#screenshots">App</a>
+          <a href="/#resources">Resources</a>
+          <a href="/merch">Merch</a>
         </nav>
       </div>
       <div class="footer-bottom">

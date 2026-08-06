@@ -57,9 +57,17 @@ Verify by rendering and comparing side by side, not by eyeballing the code.
 - `shop.label` — `Shop LGTM` becomes `Shop merch`
 - `shop.blurb` — rewrite; currently references LGTM as a separate crew
 
-`Merch.astro` needs no logic change. It already reads `hasShopUrl()` and flips
-from the "coming soon" mailto state to a live shop button. That conditional is
-the entire mechanism.
+`src/pages/merch.astro` is a real page on our own site, not a Shopify embed.
+Shopify cannot serve `amorbudget.com/merch` — subdomains only — so Astro owns
+the URL and the design, and Shopify owns checkout. `product.url` empty puts the
+page in a "not open yet" state rather than shipping a dead Buy button.
+
+`Merch.astro` on the homepage becomes a teaser linking to `/merch`. The live vs
+coming-soon split lives on `/merch` alone, so there is one place to be right
+instead of two places to drift.
+
+Nav and Footer anchors are root-relative (`/#features`, not `#features`) so they
+work from `/merch`. Bare hashes point at nothing once a second page exists.
 
 ## Store setup
 
@@ -99,7 +107,8 @@ it.
 - Custom domain — deferred, `*.myshopify.com` for now
 - Payment, tax, or payout configuration
 - Shopify theme customization beyond what ships by default
-- Embedding Shopify Buy Buttons in the Astro site; Merch links out
+- Shopify Buy Buttons / Storefront API cart on our own page. `/merch` links out
+  to Shopify for checkout. Worth revisiting only past one product.
 
 ## Acceptance criteria
 

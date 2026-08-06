@@ -1,45 +1,26 @@
 ---
-import { site, hasShopUrl } from '../data/site';
+import { site, hasProductUrl } from '../data/site';
 
-const live = hasShopUrl();
-const shopUrl = site.shop.url.trim();
-const mailto = `mailto:${site.contactEmail}?subject=${encodeURIComponent('LGTM / Amor Budget merch')}`;
+/*
+ * This is a teaser, not a storefront. It always links to /merch and lets
+ * that page own the "buy now" vs "not open yet" split — one place to be
+ * right instead of two places to drift apart.
+ */
+const live = hasProductUrl();
+const product = site.product;
 ---
 
 <section id="merch" class="section merch">
   <div class="container" data-reveal>
     <div class="merch-shell">
       <div class="merch-card">
-        <p class="merch-eyebrow">{site.shop.brand}</p>
-        {
-          live ? (
-            <>
-              <h2 class="h2">Merch is live.</h2>
-              <p class="lede">{site.shop.blurb}</p>
-              <a
-                class="btn btn-primary"
-                href={shopUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {site.shop.label}
-                <span class="btn-icon" aria-hidden="true">↗</span>
-              </a>
-            </>
-          ) : (
-            <>
-              <h2 class="h2">Merch is on its way.</h2>
-              <p class="lede">
-                {site.shop.blurb} The shop isn&rsquo;t open yet — leave a note if
-                you want first dibs.
-              </p>
-              <a class="btn btn-primary" href={mailto}>
-                Tell me when it&rsquo;s live
-                <span class="btn-icon" aria-hidden="true">→</span>
-              </a>
-            </>
-          )
-        }
+        <p class="merch-eyebrow">{product.eyebrow}</p>
+        <h2 class="h2">{live ? 'Merch is live.' : 'Merch is on its way.'}</h2>
+        <p class="lede">{site.shop.blurb}</p>
+        <a class="btn btn-primary" href="/merch">
+          {live ? product.name : 'See the first shirt'}
+          <span class="btn-icon" aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </div>
