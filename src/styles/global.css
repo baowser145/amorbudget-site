@@ -21,6 +21,12 @@
 
   --ab-accent: #5f7a52;
   --ab-accent-hover: #4a633f;
+  /*
+   * 6.07:1 on --ab-bg. Use for accent-coloured text at body size and below.
+   * --ab-accent itself is 4.35:1 on cream, under the 4.5:1 floor, so keep it
+   * to fills, borders, icons, and type 24px and up.
+   */
+  --ab-accent-text: #4a633f;
   --ab-accent-soft: #e6eddf;
   --ab-accent-on: #f7f4e9;
   --ab-accent-glow: rgba(95, 122, 82, 0.22);
@@ -159,7 +165,7 @@ a {
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ab-accent);
+  color: var(--ab-accent-text);
   background: color-mix(in srgb, var(--ab-accent-soft) 80%, white);
   border: 1px solid color-mix(in srgb, var(--ab-accent) 12%, transparent);
 }
