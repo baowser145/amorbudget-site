@@ -521,7 +521,18 @@ Query `theme.files` on the duplicate for `config/settings_schema.json` and `conf
 - Button style settings
 - Whether a custom CSS setting exists, or whether an asset file is required
 
-- [ ] **Step 3: Record the answers in the plan file before writing anything**
+**Findings, recorded 2026-08-06.** Duplicate theme: `gid://shopify/OnlineStoreTheme/190048370761`.
+
+| Question | Answer |
+|---|---|
+| Colour model | A single `color_palette` object with four keys: `background`, `foreground`, `color1`, `color2`. Around thirty other settings interpolate it as `{{ settings.color_palette.X }}`, so changing the four cascades. Per-element overrides accept literal hex. |
+| Fonts | `type_body_font`, `type_subheading_font`, `type_heading_font`, `type_accent_font`. Format is `family_weight`, e.g. `inter_n4`. |
+| Nunito available? | **Yes.** `nunito_n4` and `nunito_n7` both validated and the preview serves `nunito_n4...woff2`. No substitution needed. |
+| Radius settings | `card_corner_radius`, `product_corner_radius`, `button_border_radius_primary`/`_secondary`, `inputs_border_radius`, `popover_border_radius`, `variant_button_radius`, `badge_corner_radius`. |
+| Radius limits | `card_corner_radius` and `popover_border_radius` are **capped at 16**; the API rejects anything higher. `product_corner_radius` and the button radii accept larger values. So `--radius-lg: 28px` cannot be matched on cards. |
+| Custom CSS | No custom-CSS setting is present in `settings_data.json`. Not pursued: the palette and radius settings carried the brand on their own, and an asset file would be maintenance for shadow softness alone. |
+
+- [x] **Step 3: Record the answers in the plan file before writing anything**
 
 If Nunito is unavailable in the font picker, choose the closest available face and note the substitution here. Do not inject a webfont via custom CSS as a workaround.
 
