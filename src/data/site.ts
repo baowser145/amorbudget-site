@@ -14,7 +14,7 @@ export const site = {
    * is pointed at Shopify; product URLs in products.ts need the same swap.
    */
   shop: {
-    url: 'https://tcniga-y0.myshopify.com',
+    url: 'https://shop.amorbudget.com',
     brand: 'Amor Budget',
     label: 'Shop merch',
     blurb: 'Wearable proof you budget on purpose.',
