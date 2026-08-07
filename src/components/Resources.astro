@@ -10,18 +10,15 @@ const hasAffiliate = resources.some((r) => r.affiliate);
   <div class="container">
     <header class="resources-head" data-reveal>
       <p class="eyebrow">Resources</p>
-      <h2 class="h2">Books and tools worth your time.</h2>
-      <p class="lede">
-        Money reads and resources that help you spend with a plan — not guilt.
-        {
-          hasAffiliate && (
-            <span class="disclosure">
-              Some links are affiliate links. If you buy through them, Amor
-              Budget may earn a small commission at no extra cost to you.
-            </span>
-          )
-        }
-      </p>
+      <h2 class="h2">Money reads we recommend.</h2>
+      {
+        hasAffiliate && (
+          <p class="disclosure">
+            Some links are affiliate links — buying through them supports Amor
+            Budget at no extra cost to you.
+          </p>
+        )
+      }
     </header>
 
     {
@@ -69,11 +66,8 @@ const hasAffiliate = resources.some((r) => r.affiliate);
         <div class="empty-shell" data-reveal>
           <div class="empty-card">
             <p class="empty-kicker">Coming soon</p>
-            <p class="empty-title">A short list of money resources we trust.</p>
-            <p class="empty-body">
-              Books, tools, and reads that make spending and saving clearer.
-              We&rsquo;re curating the first set now.
-            </p>
+            <p class="empty-title">A short list of books and tools we trust.</p>
+            <p class="empty-body">We&rsquo;re curating the first set now.</p>
           </div>
         </div>
       )
@@ -99,13 +93,9 @@ const hasAffiliate = resources.some((r) => r.affiliate);
     gap: var(--space-2);
   }
 
-  .resources-head .lede {
-    max-width: 46ch;
-  }
-
   .disclosure {
-    display: block;
-    margin-top: var(--space-2);
+    margin: 0;
+    max-width: 46ch;
     font-size: 0.88rem;
     font-weight: 600;
     color: var(--muted-copy);
