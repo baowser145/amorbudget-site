@@ -1,27 +1,50 @@
 ---
+import { Image } from 'astro:assets';
 import { site } from '../data/site';
 import { products, isLive } from '../data/products';
 
 /*
- * This is a teaser, not a storefront. It links to /merch and lets the shop
- * own the "buy now" vs "not open yet" split — one place to be right instead
- * of two places to drift apart.
+ * This is a teaser, not a storefront. It shows the flagship product and
+ * links to its /merch page, which owns the "buy now" vs "not open yet"
+ * split — one place to be right instead of two places to drift apart.
  */
-const anyLive = products.some(isLive);
-const count = products.length;
+const tee = products[0];
+const live = tee ? isLive(tee) : false;
+const href = tee ? `/merch/${tee.slug}` : '/merch';
 ---
 
 <section id="merch" class="section merch">
   <div class="container" data-reveal>
     <div class="merch-shell">
       <div class="merch-card">
-        <p class="merch-eyebrow">{site.shop.brand}</p>
-        <h2 class="h2">{anyLive ? 'Wear the budget.' : 'Merch is on its way.'}</h2>
-        <p class="lede">{site.shop.blurb}</p>
-        <a class="btn btn-primary" href="/merch">
-          {anyLive ? 'Shop merch' : count > 1 ? 'See the designs' : 'See the first shirt'}
-          <span class="btn-icon" aria-hidden="true">→</span>
-        </a>
+        {
+          tee && (
+            <a class="merch-photo" href={href} aria-label={tee.name}>
+              <Image
+                src={tee.images[0].src}
+                alt={tee.images[0].alt}
+                widths={[360, 540, 720]}
+                sizes="(max-width: 700px) 78vw, 340px"
+                loading="lazy"
+              />
+            </a>
+          )
+        }
+        <div class="merch-copy">
+          <p class="merch-eyebrow">{site.shop.brand} merch</p>
+          <h2 class="h2">Wear the budget.</h2>
+          {
+            tee && (
+              <p class="merch-product">
+                {tee.name} · from {tee.priceFrom}
+              </p>
+            )
+          }
+          <a class="btn btn-primary" href={href}>
+            {live ? 'Buy now' : 'See the shirt'}
+            <span class="btn-icon" aria-hidden="true">→</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -41,17 +64,44 @@ const count = products.length;
   }
 
   .merch-card {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     align-items: center;
-    text-align: center;
-    gap: var(--space-2);
-    padding: clamp(40px, 7vw, 72px) clamp(24px, 5vw, 48px);
+    gap: clamp(28px, 5vw, 56px);
+    padding: clamp(32px, 5vw, 56px) clamp(24px, 5vw, 64px);
     border-radius: calc(var(--radius-2xl) - 4px);
     background:
       radial-gradient(ellipse 80% 70% at 20% 0%, rgba(255, 255, 255, 0.14), transparent 50%),
       linear-gradient(160deg, #6f8b61 0%, var(--ab-accent) 45%, #4a633f 100%);
     box-shadow: var(--shadow-inset);
+  }
+
+  .merch-photo {
+    display: block;
+    justify-self: center;
+    max-width: 340px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.45);
+    transform: rotate(-2deg);
+    transition: transform 500ms var(--ease-spring);
+  }
+
+  .merch-photo:hover {
+    transform: rotate(0deg) translateY(-6px);
+  }
+
+  .merch-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .merch-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
   }
 
   .merch-eyebrow {
@@ -65,13 +115,14 @@ const count = products.length;
 
   .merch-card .h2 {
     color: var(--ab-accent-on);
-    max-width: 16ch;
+    max-width: 12ch;
   }
 
-  .merch-card .lede {
+  .merch-product {
+    margin: 0 0 var(--space-2);
+    font-size: 1rem;
+    font-weight: 700;
     color: rgba(255, 255, 255, 0.9);
-    max-width: 40ch;
-    margin-bottom: var(--space-2);
   }
 
   .merch-card .btn-primary {
@@ -88,5 +139,20 @@ const count = products.length;
   .merch-card .btn-primary:hover {
     background: #ffffff;
     box-shadow: 0 16px 32px -12px rgba(0, 0, 0, 0.35);
+  }
+
+  @media (max-width: 700px) {
+    .merch-card {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .merch-copy {
+      align-items: center;
+    }
+
+    .merch-photo {
+      max-width: min(320px, 78vw);
+    }
   }
 </style>
