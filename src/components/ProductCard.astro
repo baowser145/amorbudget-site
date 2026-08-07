@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { Product } from '../data/products';
 
 interface Props {
@@ -13,7 +14,13 @@ const hero = product.images[0];
   <div class="card-media">
     {
       hero ? (
-        <img src={hero.src} alt={hero.alt} width="900" height="900" loading="lazy" />
+        <Image
+          src={hero.src}
+          alt={hero.alt}
+          widths={[400, 600, 900]}
+          sizes="(max-width: 720px) 90vw, 340px"
+          loading="lazy"
+        />
       ) : (
         <div class="card-empty" aria-hidden="true" />
       )
@@ -51,6 +58,9 @@ const hero = product.images[0];
   .card-media img,
   .card-empty {
     width: 100%;
+    /* Required: <Image> emits height="2000", and without this the attribute
+       wins over aspect-ratio and the card renders a 2000px-tall crop. */
+    height: auto;
     aspect-ratio: 4 / 5;
     object-fit: cover;
     display: block;

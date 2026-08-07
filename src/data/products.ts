@@ -10,7 +10,10 @@
  * in its "not yet" state instead of shipping a Buy button that 404s, which is
  * why a design can live here before the Shopify listing exists.
  */
+import type { ImageMetadata } from 'astro';
 import { site } from './site';
+import frontImage from '../assets/merch/v1-tee-front.jpg';
+import backImage from '../assets/merch/v1-tee-back.jpg';
 
 export interface Product {
   /** URL segment: /merch/<slug> */
@@ -25,7 +28,8 @@ export interface Product {
   blurb: string;
   /** Shopify product handle, e.g. 'amor-budget-v1-0-0-launch-edition'. */
   handle: string;
-  images: { src: string; alt: string }[];
+  /** First entry is the hero. Imported assets, so Astro can optimize them. */
+  images: { src: ImageMetadata; alt: string }[];
   sizes: string[];
   specs: string[];
   note?: string;
@@ -41,7 +45,16 @@ export const products: Product[] = [
     blurb:
       'Amor Budget v1 shipped. This shirt marks it. Soft, heavy, and broken in from the first wear, on a garment-dyed tee that keeps fading and softening the longer you own it.',
     handle: 'amor-budget-v1-0-0-launch-edition',
-    images: [],
+    images: [
+      {
+        src: frontImage,
+        alt: 'Front of the Amor Budget tee in faded cream, printed at center chest with the Amor Budget wordmark in stacked, overlapping letters in blue, teal, coral, peach and olive.',
+      },
+      {
+        src: backImage,
+        alt: 'Back of the Amor Budget tee in faded cream, unprinted, showing the relaxed cut and wide rib collar.',
+      },
+    ],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
     specs: [
       '100% cotton',
