@@ -10,8 +10,6 @@ import appIcon from '../assets/app-icon.png';
  */
 const links = [
   { href: '/#features', label: 'Features' },
-  { href: '/#screenshots', label: 'App' },
-  { href: '/#resources', label: 'Resources' },
   { href: '/merch', label: 'Merch' },
 ];
 ---
@@ -38,7 +36,7 @@ const links = [
         }
       </nav>
 
-      <a class="nav-cta btn btn-primary btn-plain" href="/#screenshots">See the app</a>
+      <a class="nav-cta btn btn-primary btn-plain" href="/#features">See how it works</a>
     </div>
   </div>
 </header>
@@ -131,7 +129,7 @@ const links = [
    * Every link stays visible at every width — no hamburger. A phone user
    * reported not being able to find Merch when the links were hidden, so
    * narrow screens tighten spacing and drop the redundant CTA instead
-   * ("App" already points at #screenshots).
+   * ("Features" already points at #features).
    */
   @media (max-width: 860px) {
     .nav-cta {
