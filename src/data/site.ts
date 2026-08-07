@@ -8,13 +8,13 @@ export const site = {
   contactEmail: 'baohuylamvu@gmail.com',
 
   /**
-   * Shopify storefront. Paste the live URL when the store is ready, e.g.
-   *   'https://amor-budget.myshopify.com'
-   * Shopify cannot be hosted at amorbudget.com/merch — subdomains only — so
-   * /merch is our own Astro page and Shopify handles checkout from there.
+   * Shopify storefront. Shopify cannot be hosted at amorbudget.com/merch —
+   * subdomains only — so /merch is our own Astro page and Shopify handles
+   * checkout from there. Swap this for shop.amorbudget.com once that domain
+   * is pointed at Shopify; product URLs in products.ts need the same swap.
    */
   shop: {
-    url: '',
+    url: 'https://tcniga-y0.myshopify.com',
     brand: 'Amor Budget',
     label: 'Shop merch',
     blurb: 'Wearable proof you budget on purpose.',

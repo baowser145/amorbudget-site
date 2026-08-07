@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
-import { products, isLive, type Product } from '../../data/products';
+import { products, isLive, productUrl, type Product } from '../../data/products';
 import { site } from '../../data/site';
 
 export function getStaticPaths() {
@@ -18,7 +18,7 @@ interface Props {
 
 const { product } = Astro.props;
 const live = isLive(product);
-const buyHref = product.url.trim();
+const buyHref = productUrl(product);
 
 // Kept flat: a nested multi-line template literal in frontmatter makes the
 // Astro compiler lose the fence and emit it as page text.

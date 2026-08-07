@@ -5,10 +5,13 @@
  * they get there. Adding a product means adding an entry here and dropping
  * mockups in public/merch/ — no component edits.
  *
- * `url` is the Shopify product page. Empty means the product renders in its
- * "not yet" state instead of shipping a Buy button that 404s, which is why
- * a design can live here before the Shopify listing exists.
+ * Products store a Shopify handle, not a full URL, so moving the storefront
+ * to a new domain is one edit in site.ts. An empty handle renders the product
+ * in its "not yet" state instead of shipping a Buy button that 404s, which is
+ * why a design can live here before the Shopify listing exists.
  */
+import { site } from './site';
+
 export interface Product {
   /** URL segment: /merch/<slug> */
   slug: string;
@@ -20,7 +23,8 @@ export interface Product {
   tagline: string;
   /** Full paragraph for the product page. */
   blurb: string;
-  url: string;
+  /** Shopify product handle, e.g. 'amor-budget-v1-0-0-launch-edition'. */
+  handle: string;
   images: { src: string; alt: string }[];
   sizes: string[];
   specs: string[];
@@ -36,7 +40,7 @@ export const products: Product[] = [
     tagline: 'Garment-dyed heavyweight cotton, natural.',
     blurb:
       'Amor Budget v1 shipped. This shirt marks it. Soft, heavy, and broken in from the first wear, on a garment-dyed tee that keeps fading and softening the longer you own it.',
-    url: '',
+    handle: 'amor-budget-v1-0-0-launch-edition',
     images: [],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
     specs: [
@@ -55,7 +59,14 @@ export function getProduct(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
 }
 
+/** The Shopify product page, or '' when there is nothing to link to yet. */
+export function productUrl(p: Product): string {
+  const base = site.shop.url?.trim().replace(/\/$/, '');
+  const handle = p.handle?.trim();
+  return base && handle ? base + '/products/' + handle : '';
+}
+
 /** True when a product can show a working Buy button. */
 export function isLive(p: Product): boolean {
-  return Boolean(p.url?.trim());
+  return Boolean(productUrl(p));
 }
