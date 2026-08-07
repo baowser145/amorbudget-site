@@ -11,19 +11,19 @@ const points = [
   {
     id: 'needs',
     label: 'Needs vs Wants',
-    body: 'See both buckets for today, not a single confusing number.',
+    body: 'Both buckets for today, at a glance.',
     rect: { left: 5.7, top: 15.0, width: 88.7, height: 16.9 },
   },
   {
     id: 'bills',
     label: 'Bills ahead',
-    body: 'Due dates show up early so payday math stays honest.',
+    body: 'Due dates before they hit your balance.',
     rect: { left: 6.0, top: 34.3, width: 88.0, height: 20.7 },
   },
   {
     id: 'log',
     label: 'Manual & private',
-    body: 'Log spending in seconds without connecting a bank.',
+    body: 'Log spending in seconds. No bank login.',
     rect: { left: 6.0, top: 65.5, width: 88.6, height: 24.5 },
   },
 ];
@@ -64,11 +64,7 @@ const points = [
 
     <div class="screenshots-copy" data-reveal style="transition-delay: 100ms">
       <p class="eyebrow">The app</p>
-      <h2 class="h2">Home shows everything you need in one glance.</h2>
-      <p class="lede">
-        Today&rsquo;s budget, bills due this week, and your last few purchases —
-        all on one screen. No digging through menus to find out where you stand.
-      </p>
+      <h2 class="h2">Everything on one screen.</h2>
       <ul class="points">
         {
           points.map((p, i) => (
@@ -215,12 +211,6 @@ const points = [
 
   .screenshots-copy .h2 {
     color: var(--ab-accent-on);
-    margin-bottom: var(--space-2);
-  }
-
-  .screenshots-copy .lede {
-    color: var(--muted-on-ink);
-    max-width: 40ch;
     margin-bottom: var(--space-4);
   }
 
