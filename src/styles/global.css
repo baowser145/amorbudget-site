@@ -148,7 +148,7 @@ a {
 
 @media (max-width: 768px) {
   .section {
-    padding: var(--space-6) 0;
+    padding: var(--space-5) 0;
   }
 }
 
