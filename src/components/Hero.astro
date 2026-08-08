@@ -7,8 +7,10 @@ import homeShot from '../assets/screenshots/home.png';
   <div class="container hero-grid">
     <div class="hero-copy">
       <p class="eyebrow" data-hero-in style="--hero-in-order: 0">Coming soon to iOS</p>
+      {/* The {' '} is load-bearing: compressHTML strips a bare newline here,
+          which fuses "spend" and "today" when the span renders inline. */}
       <h1 class="h1" data-hero-in style="--hero-in-order: 1">
-        Know what&rsquo;s safe to spend
+        Know what&rsquo;s safe to spend{' '}
         <span class="accent-line">today</span>
       </h1>
       <p class="lede" data-hero-in style="--hero-in-order: 2">
@@ -57,7 +59,7 @@ import homeShot from '../assets/screenshots/home.png';
 <style>
   .hero {
     position: relative;
-    padding: clamp(40px, 8vw, 88px) 0 clamp(64px, 10vw, 120px);
+    padding: clamp(24px, 6vw, 88px) 0 clamp(40px, 9vw, 120px);
     overflow: clip;
   }
 
