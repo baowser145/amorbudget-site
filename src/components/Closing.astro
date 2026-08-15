@@ -1,10 +1,12 @@
 ---
+import { site } from '../data/site';
+
 /*
  * The Figma closes on an "Download on the App Store" button. Amor Budget is
  * not on the App Store yet, so shipping that button would be a dead link on
  * the most prominent CTA of the page. The section keeps its shape and states
  * the real status instead — and points at the one thing you can actually buy
- * today, which is the merch.
+ * today, which is the merch storefront.
  */
 ---
 
@@ -20,7 +22,7 @@
       Coming soon to the App Store
     </p>
 
-    <a class="btn btn-primary" href="#merch">
+    <a class="btn btn-primary" href={site.shop.url} target="_blank" rel="noopener noreferrer">
       Shop the merch
       <span class="btn-icon" aria-hidden="true">→</span>
     </a>

@@ -1,16 +1,20 @@
 ---
 import { Image } from 'astro:assets';
 import appIcon from '../assets/app-icon.png';
+import { site } from '../data/site';
 
 /*
  * Root-relative hashes, not bare ones: these anchors have to work from
  * /merch too, where a bare "#features" points at nothing. On the homepage
  * the browser still treats "/#features" as a same-document fragment, so
  * smooth scrolling is unaffected.
+ *
+ * "Merch" goes straight to the Shopify storefront (user request, 2026-08-15)
+ * — not to /merch or the homepage section.
  */
 const links = [
   { href: '/#features', label: 'Features' },
-  { href: '/merch', label: 'Merch' },
+  { href: site.shop.url, label: 'Merch', external: true },
 ];
 ---
 

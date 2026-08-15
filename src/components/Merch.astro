@@ -8,9 +8,8 @@ import { products, productUrl, isLive } from '../data/products';
  *
  * The track is a native scroll-snap container, so it works with no JS at all:
  * swipe on touch, shift-scroll or the arrow keys on desktop. The script below
- * only adds the buttons and keeps the thumbnail strip in sync — if it never
- * runs, every product is still reachable and every Buy button still points at
- * the right Shopify page.
+ * only adds the prev/next buttons — if it never runs, every product is still
+ * reachable and every Buy button still points at the right Shopify page.
  *
  * "Buy now" goes straight to the product on shop.amorbudget.com rather than
  * to our own /merch/<slug> page: this section is the storefront now, and one
@@ -111,31 +110,6 @@ const shopUrl = site.shop.url;
       </button>
     </div>
 
-    <!--
-      Every product, always visible. The carousel shows one at a time; this
-      strip is what makes the range legible at a glance, and it doubles as the
-      carousel's control surface.
-    -->
-    <ol class="thumbs" data-reveal>
-      {
-        products.map((p, i) => (
-          <li>
-            <button
-              class="thumb"
-              type="button"
-              data-goto={i}
-              aria-label={`Show ${p.name}, from ${p.priceFrom}`}
-            >
-              <span class="thumb-shot">
-                <Image src={p.images[0].src} alt="" widths={[120, 240]} sizes="120px" loading="lazy" />
-              </span>
-              <span class="thumb-name">{p.shortName}</span>
-              <span class="thumb-price">from {p.priceFrom}</span>
-            </button>
-          </li>
-        ))
-      }
-    </ol>
   </div>
 </section>
 
@@ -143,7 +117,6 @@ const shopUrl = site.shop.url;
   const track = document.getElementById('merch-track');
   if (track) {
     const slides = [...track.querySelectorAll<HTMLElement>('.slide')];
-    const thumbs = [...document.querySelectorAll<HTMLButtonElement>('.thumb')];
     const prev = document.querySelector<HTMLButtonElement>('.cnav-prev');
     const next = document.querySelector<HTMLButtonElement>('.cnav-next');
     let active = 0;
@@ -167,16 +140,12 @@ const shopUrl = site.shop.url;
 
     const setActive = (i: number) => {
       active = i;
-      thumbs.forEach((t, n) => t.setAttribute('aria-current', String(n === i)));
       if (prev) prev.disabled = i === 0;
       if (next) next.disabled = i === slides.length - 1;
     };
 
     prev?.addEventListener('click', () => goTo(active - 1));
     next?.addEventListener('click', () => goTo(active + 1));
-    thumbs.forEach((t) =>
-      t.addEventListener('click', () => goTo(Number(t.dataset.goto)))
-    );
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -408,77 +377,6 @@ const shopUrl = site.shop.url;
     right: clamp(-22px, -1.5vw, -10px);
   }
 
-  /* ---------- thumbnail strip ---------- */
-
-  .thumbs {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 12px;
-    margin: var(--space-4) 0 0;
-    padding: 0;
-    counter-reset: none;
-  }
-
-  .thumb {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 8px 12px;
-    border-radius: var(--radius-md);
-    background: transparent;
-    border: 1px solid transparent;
-    font-family: var(--ab-font);
-    cursor: pointer;
-    transition:
-      background-color 220ms var(--ease-spring),
-      border-color 220ms var(--ease-spring),
-      transform 220ms var(--ease-spring);
-  }
-
-  .thumb:hover {
-    background: color-mix(in srgb, var(--ab-surface-raised) 70%, transparent);
-    transform: translateY(-2px);
-  }
-
-  .thumb[aria-current='true'] {
-    background: var(--ab-surface-raised);
-    border-color: color-mix(in srgb, var(--ab-accent) 34%, transparent);
-    box-shadow: var(--shadow-soft);
-  }
-
-  .thumb-shot {
-    display: block;
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 14px;
-    overflow: hidden;
-    background: var(--ab-bg-deep);
-  }
-
-  .thumb-shot img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    mix-blend-mode: multiply;
-  }
-
-  .thumb-name {
-    font-size: 12.5px;
-    font-weight: 800;
-    line-height: 1.2;
-    color: var(--ab-ink);
-    text-align: center;
-  }
-
-  .thumb-price {
-    font-size: 11.5px;
-    font-weight: 700;
-    color: var(--muted-copy);
-  }
-
   @media (max-width: 900px) {
     .merch-head {
       grid-template-columns: 1fr;
@@ -504,14 +402,10 @@ const shopUrl = site.shop.url;
       justify-content: center;
     }
 
-    /* The arrows would sit over the photo on a stacked card. Swipe and the
-     * thumbnail strip both still work. */
+    /* The arrows would sit over the photo on a stacked card. Swiping the
+     * scroll-snap track still works. */
     .cnav {
       display: none;
-    }
-
-    .thumbs {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
@@ -519,10 +413,6 @@ const shopUrl = site.shop.url;
     .slide {
       flex-basis: 86%;
       padding: 16px;
-    }
-
-    .thumbs {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>
