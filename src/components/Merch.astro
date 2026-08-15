@@ -1,158 +1,529 @@
 ---
 import { Image } from 'astro:assets';
 import { site } from '../data/site';
-import { products, isLive } from '../data/products';
+import { products, productUrl, isLive } from '../data/products';
 
 /*
- * This is a teaser, not a storefront. It shows the flagship product and
- * links to its /merch page, which owns the "buy now" vs "not open yet"
- * split — one place to be right instead of two places to drift apart.
+ * The whole catalogue, in one card that scrolls.
+ *
+ * The track is a native scroll-snap container, so it works with no JS at all:
+ * swipe on touch, shift-scroll or the arrow keys on desktop. The script below
+ * only adds the buttons and keeps the thumbnail strip in sync — if it never
+ * runs, every product is still reachable and every Buy button still points at
+ * the right Shopify page.
+ *
+ * "Buy now" goes straight to the product on shop.amorbudget.com rather than
+ * to our own /merch/<slug> page: this section is the storefront now, and one
+ * less hop before checkout is one less place to lose someone.
  */
-const tee = products[0];
-const live = tee ? isLive(tee) : false;
-const href = tee ? `/merch/${tee.slug}` : '/merch';
+const shopUrl = site.shop.url;
 ---
 
-<section id="merch" class="section merch">
-  <div class="container" data-reveal>
-    <div class="merch-shell">
-      <div class="merch-card">
-        {
-          tee && (
-            <a class="merch-photo" href={href} aria-label={tee.name}>
-              <Image
-                src={tee.images[0].src}
-                alt={tee.images[0].alt}
-                widths={[360, 540, 720]}
-                sizes="(max-width: 700px) 78vw, 340px"
-                loading="lazy"
-              />
-            </a>
-          )
-        }
-        <div class="merch-copy">
-          <p class="merch-eyebrow">{site.shop.brand} merch</p>
-          <h2 class="h2">Wear the budget.</h2>
-          {
-            tee && (
-              <p class="merch-product">
-                {tee.name} · from {tee.priceFrom}
-              </p>
-            )
-          }
-          <a class="btn btn-primary" href={href}>
-            {live ? 'Buy now' : 'See the shirt'}
-            <span class="btn-icon" aria-hidden="true">→</span>
-          </a>
-        </div>
+<section id="merch" class="section band band-sand">
+  <div class="container">
+    <header class="merch-head" data-reveal>
+      <div>
+        <p class="eyebrow-bare">Merch</p>
+        <h2 class="h2">
+          Wear your <em class="ital ital-olive">values.</em>
+        </h2>
       </div>
+      <div class="merch-head-aside">
+        <p class="lede">
+          {site.shop.blurb} Printed after you order, shipped worldwide.
+        </p>
+        <a class="text-link" href={shopUrl} target="_blank" rel="noopener noreferrer">
+          Shop all {products.length} designs
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </header>
+
+    <div class="carousel" data-reveal>
+      <div
+        class="track"
+        id="merch-track"
+        tabindex="0"
+        role="group"
+        aria-label="Amor Budget merch, one product at a time"
+      >
+        {
+          products.map((p, i) => (
+            <article class="slide" data-slide={i} aria-label={p.name}>
+              <a class="shot" href={productUrl(p) || `/merch/${p.slug}`}>
+                <Image
+                  src={p.images[0].src}
+                  alt={p.images[0].alt}
+                  widths={[360, 560, 760]}
+                  sizes="(max-width: 860px) 82vw, 440px"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                />
+              </a>
+
+              <div class="detail">
+                <p class="eyebrow-bare">{p.eyebrow}</p>
+                <h3 class="h3">{p.name}</h3>
+                <p class="detail-tagline">{p.tagline}</p>
+
+                <p class="price">
+                  <span class="price-figure">from {p.priceFrom}</span>
+                  <span class="price-note">
+                    {p.colors ? `${p.colors.length} colourways · ` : ''}
+                    {p.sizes.length} sizes
+                  </span>
+                </p>
+
+                <ul class="sizes" aria-label="Available sizes">
+                  {p.sizes.map((s) => (
+                    <li>{s}</li>
+                  ))}
+                </ul>
+
+                <div class="detail-actions">
+                  {isLive(p) ? (
+                    <a
+                      class="btn btn-primary"
+                      href={productUrl(p)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Buy now
+                      <span class="btn-icon" aria-hidden="true">
+                        →
+                      </span>
+                    </a>
+                  ) : (
+                    <span class="btn btn-ghost btn-plain">Not open yet</span>
+                  )}
+                  <a class="text-link" href={`/merch/${p.slug}`}>Details</a>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <button class="cnav cnav-prev" type="button" aria-label="Previous product" hidden>
+        <span aria-hidden="true">←</span>
+      </button>
+      <button class="cnav cnav-next" type="button" aria-label="Next product" hidden>
+        <span aria-hidden="true">→</span>
+      </button>
     </div>
+
+    <!--
+      Every product, always visible. The carousel shows one at a time; this
+      strip is what makes the range legible at a glance, and it doubles as the
+      carousel's control surface.
+    -->
+    <ol class="thumbs" data-reveal>
+      {
+        products.map((p, i) => (
+          <li>
+            <button
+              class="thumb"
+              type="button"
+              data-goto={i}
+              aria-label={`Show ${p.name}, from ${p.priceFrom}`}
+            >
+              <span class="thumb-shot">
+                <Image src={p.images[0].src} alt="" widths={[120, 240]} sizes="120px" loading="lazy" />
+              </span>
+              <span class="thumb-name">{p.shortName}</span>
+              <span class="thumb-price">from {p.priceFrom}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </section>
 
+<script>
+  const track = document.getElementById('merch-track');
+  if (track) {
+    const slides = [...track.querySelectorAll<HTMLElement>('.slide')];
+    const thumbs = [...document.querySelectorAll<HTMLButtonElement>('.thumb')];
+    const prev = document.querySelector<HTMLButtonElement>('.cnav-prev');
+    const next = document.querySelector<HTMLButtonElement>('.cnav-next');
+    let active = 0;
+
+    // The buttons ship hidden and are revealed here: without JS they'd be dead
+    // controls sitting on top of a carousel that scrolls perfectly well without
+    // them.
+    prev?.removeAttribute('hidden');
+    next?.removeAttribute('hidden');
+
+    const motionOk = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const goTo = (i: number) => {
+      const target = slides[Math.max(0, Math.min(slides.length - 1, i))];
+      if (!target) return;
+      // scrollTo on the track, not scrollIntoView on the slide — the latter
+      // also scrolls the page vertically to bring the section into view, which
+      // yanks the viewport every time someone clicks a thumbnail.
+      track.scrollTo({ left: target.offsetLeft - track.offsetLeft, behavior: motionOk ? 'smooth' : 'auto' });
+    };
+
+    const setActive = (i: number) => {
+      active = i;
+      thumbs.forEach((t, n) => t.setAttribute('aria-current', String(n === i)));
+      if (prev) prev.disabled = i === 0;
+      if (next) next.disabled = i === slides.length - 1;
+    };
+
+    prev?.addEventListener('click', () => goTo(active - 1));
+    next?.addEventListener('click', () => goTo(active + 1));
+    thumbs.forEach((t) =>
+      t.addEventListener('click', () => goTo(Number(t.dataset.goto)))
+    );
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(slides.indexOf(e.target as HTMLElement));
+        }
+      },
+      { root: track, threshold: 0.6 }
+    );
+    slides.forEach((s) => io.observe(s));
+
+    setActive(0);
+  }
+</script>
+
 <style>
-  .merch {
-    padding-top: var(--space-6);
-  }
-
-  .merch-shell {
-    padding: 6px;
-    border-radius: var(--radius-2xl);
-    background: color-mix(in srgb, var(--ab-accent) 16%, transparent);
-    border: 1px solid color-mix(in srgb, var(--ab-accent) 24%, transparent);
-    box-shadow: var(--shadow-soft);
-  }
-
-  .merch-card {
+  .merch-head {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    align-items: center;
-    gap: clamp(28px, 5vw, 56px);
-    padding: clamp(32px, 5vw, 56px) clamp(24px, 5vw, 64px);
-    border-radius: calc(var(--radius-2xl) - 4px);
-    background:
-      radial-gradient(ellipse 80% 70% at 20% 0%, rgba(255, 255, 255, 0.14), transparent 50%),
-      linear-gradient(160deg, #6f8b61 0%, var(--ab-accent) 45%, #4a633f 100%);
-    box-shadow: var(--shadow-inset);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    align-items: end;
+    gap: var(--space-3) clamp(24px, 5vw, 64px);
+    margin-bottom: var(--space-5);
   }
 
-  .merch-photo {
-    display: block;
-    justify-self: center;
-    max-width: 340px;
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.45);
-    transform: rotate(-2deg);
-    transition: transform 500ms var(--ease-spring);
-  }
-
-  .merch-photo:hover {
-    transform: rotate(0deg) translateY(-6px);
-  }
-
-  .merch-photo img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .merch-copy {
+  .merch-head-aside {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-2);
+    gap: 10px;
   }
 
-  .merch-eyebrow {
-    margin: 0;
-    font-size: 12px;
+  .merch-head .lede {
+    max-width: 40ch;
+  }
+
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
     font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(247, 244, 233, 0.92);
+    color: var(--ab-accent-text);
+    text-decoration: none;
+    transition: gap 240ms var(--ease-spring);
   }
 
-  .merch-card .h2 {
-    color: var(--ab-accent-on);
-    max-width: 12ch;
+  .text-link:hover {
+    gap: 12px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 
-  .merch-product {
-    margin: 0 0 var(--space-2);
+  /* ---------- carousel ---------- */
+
+  .carousel {
+    position: relative;
+  }
+
+  .track {
+    display: flex;
+    gap: clamp(16px, 3vw, 28px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    /* Room for the card shadow, which a plain overflow container would clip. */
+    padding: 6px 6px 18px;
+    margin: -6px -6px -18px;
+  }
+
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .track:focus-visible {
+    outline: 2.5px solid var(--ab-accent);
+    outline-offset: 4px;
+    border-radius: var(--radius-lg);
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(24px, 4vw, 56px);
+    padding: clamp(20px, 3vw, 32px);
+    border-radius: var(--radius-xl);
+    background: var(--ab-surface-raised);
+    border: 1px solid var(--ab-border);
+    box-shadow: var(--shadow-card);
+  }
+
+  /*
+   * Printful's mockups are all shot on pure white, so the photo gets its own
+   * tinted panel rather than bleeding into the card — otherwise the product
+   * floats in a white rectangle with no edge.
+   */
+  .shot {
+    display: block;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--ab-bg-deep);
+    border: 1px solid var(--ab-border);
+    transition: transform 500ms var(--ease-spring);
+  }
+
+  .shot:hover {
+    transform: translateY(-4px);
+  }
+
+  .shot img {
+    width: 100%;
+    height: auto;
+    mix-blend-mode: multiply;
+  }
+
+  .detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detail .h3 {
+    margin-bottom: 10px;
+  }
+
+  .detail-tagline {
+    margin: 0 0 var(--space-3);
     font-size: 1rem;
+    font-weight: 600;
+    color: var(--muted-copy);
+    max-width: 34ch;
+  }
+
+  .price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin: 0 0 var(--space-3);
+  }
+
+  .price-figure {
+    font-family: var(--ab-display);
+    font-variation-settings: 'opsz' 144;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+    letter-spacing: -0.02em;
+    color: var(--ab-ink);
   }
 
-  .merch-card .btn-primary {
-    background: var(--ab-accent-on);
-    color: var(--ab-accent-hover);
-    box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.35);
+  .price-note {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--muted-copy);
   }
 
-  .merch-card .btn-primary .btn-icon {
-    background: color-mix(in srgb, var(--ab-accent) 14%, white);
-    color: var(--ab-accent-hover);
+  .sizes {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 var(--space-4);
+    padding: 0;
   }
 
-  .merch-card .btn-primary:hover {
-    background: #ffffff;
-    box-shadow: 0 16px 32px -12px rgba(0, 0, 0, 0.35);
+  .sizes li {
+    min-width: 40px;
+    padding: 7px 12px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ab-ink);
+    background: var(--ab-bg-deep);
+    border: 1px solid var(--ab-border);
   }
 
-  @media (max-width: 700px) {
-    .merch-card {
+  .detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+  }
+
+  .detail-actions .text-link {
+    color: var(--ab-ink);
+  }
+
+  .cnav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--ab-surface-raised);
+    border: 1px solid var(--ab-border-strong);
+    box-shadow: var(--shadow-card);
+    color: var(--ab-ink);
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 2;
+    transition:
+      background-color 220ms var(--ease-spring),
+      opacity 220ms var(--ease-spring),
+      transform 220ms var(--ease-spring);
+  }
+
+  .cnav:hover:not(:disabled) {
+    background: var(--ab-accent);
+    color: var(--ab-accent-on);
+    border-color: transparent;
+  }
+
+  .cnav:disabled {
+    opacity: 0.32;
+    cursor: default;
+  }
+
+  .cnav-prev {
+    left: clamp(-22px, -1.5vw, -10px);
+  }
+
+  .cnav-next {
+    right: clamp(-22px, -1.5vw, -10px);
+  }
+
+  /* ---------- thumbnail strip ---------- */
+
+  .thumbs {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    counter-reset: none;
+  }
+
+  .thumb {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 8px 12px;
+    border-radius: var(--radius-md);
+    background: transparent;
+    border: 1px solid transparent;
+    font-family: var(--ab-font);
+    cursor: pointer;
+    transition:
+      background-color 220ms var(--ease-spring),
+      border-color 220ms var(--ease-spring),
+      transform 220ms var(--ease-spring);
+  }
+
+  .thumb:hover {
+    background: color-mix(in srgb, var(--ab-surface-raised) 70%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .thumb[aria-current='true'] {
+    background: var(--ab-surface-raised);
+    border-color: color-mix(in srgb, var(--ab-accent) 34%, transparent);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .thumb-shot {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--ab-bg-deep);
+  }
+
+  .thumb-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+  }
+
+  .thumb-name {
+    font-size: 12.5px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--ab-ink);
+    text-align: center;
+  }
+
+  .thumb-price {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--muted-copy);
+  }
+
+  @media (max-width: 900px) {
+    .merch-head {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .slide {
       grid-template-columns: 1fr;
       text-align: center;
     }
 
-    .merch-copy {
+    .detail {
       align-items: center;
     }
 
-    .merch-photo {
-      max-width: min(320px, 78vw);
+    .detail-tagline {
+      margin-inline: auto;
+    }
+
+    .price,
+    .sizes,
+    .detail-actions {
+      justify-content: center;
+    }
+
+    /* The arrows would sit over the photo on a stacked card. Swipe and the
+     * thumbnail strip both still work. */
+    .cnav {
+      display: none;
+    }
+
+    .thumbs {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .slide {
+      flex-basis: 86%;
+      padding: 16px;
+    }
+
+    .thumbs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>

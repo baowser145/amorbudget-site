@@ -1,9 +1,11 @@
-# Session Handoff — amorbudget-site — 2026-08-06 20:24 CDT
+# Session Handoff — amorbudget-site — 2026-08-15 16:50 CDT
 
 ## One-Line Status
 
-The merch funnel is live end to end (site → Shopify → checkout) and a brand-styled
-Shopify theme is built and previewable, waiting only on the user to click Publish.
+The homepage is rebuilt against the Figma Make "Modernize Website Design" comp —
+editorial Fraunces display type on the existing olive/blush palette, six real
+products in a scrolling merch card moved up to second position, and a freshly
+rendered app screenshot taken from the running app rather than a stale export.
 
 ## Project Path
 
@@ -11,141 +13,160 @@ Shopify theme is built and previewable, waiting only on the user to click Publis
 
 ## Phase
 
-ship — Phase A shipped and verified in production; Phase B built, blocked on a
-manual publish step.
+build — homepage redesign complete and verified. Branch `redesign/homepage-2026-08`.
 
-## Roast Verdict
+## The Design Source
 
-Not run. `/roast` was never invoked for this workstream; it is a merch feature on
-an existing site, not a new product. No `.claude/roast-verdict.md` exists.
+Figma Make: `https://www.figma.com/make/DDMO4KqzmQNseWMI7M7ijV/Modernize-Website-Design`
 
-## Decisions Made
+Its own summary of what it built: Hero, How It Works, Features, Privacy Banner,
+Merch, Download CTA, Footer. Typography Fraunces + Outfit. It claimed the
+"warm cream/teal/coral palette is preserved" — it is not; the comp is teal and
+coral, the brand is olive and blush.
 
-- **Both surfaces, one look**: modernize the Astro `/merch` pages *and* the Shopify
-  storefront, so the handoff at purchase does not read as two companies.
-- **Keep the existing brand**: `ui-ux-pro-max` recommended Swiss Modernism with a
-  pink `#EC4899` accent. Rejected — the cream/sage identity is tied to the app.
-  Adopted only its spacious density, single-CTA focus, and grid discipline.
-- **Theme depth = settings + optional CSS, not a Liquid rewrite**: not worth owning
-  theme code for a one-product store. Custom CSS ended up unnecessary.
-- **Duplicate, never touch MAIN**: all theme writes went to an unpublished copy.
-- **Products store a Shopify `handle`, not a full URL**: `productUrl()` composes it
-  against `site.shop.url`, so a domain move is one edit. This paid off immediately
-  when `shop.amorbudget.com` went live mid-session.
-- **No cart on amorbudget.com**: Shopify owns checkout, one place to be right.
+## Decisions Made (user answered all three directly)
+
+- **Palette: keep olive + blush.** The comp's teal/coral was rejected in favour
+  of the existing `--ab-accent` olive and blush tokens, so the site keeps
+  matching the iOS app and shop.amorbudget.com. Only the layout, structure and
+  composition came from the comp.
+- **Type: Fraunces display + Nunito body.** `@fontsource-variable/fraunces`
+  (opsz + opsz-italic cuts only). `.h1/.h2/.h3` are Fraunces 700 at `opsz 144`.
+  Body, buttons, nav and the brand lockup stay Nunito. Outfit was not adopted.
+- **App status: still coming soon.** The comp shipped "iOS APP — AVAILABLE NOW"
+  and a working App Store button. The app is not on the App Store, so the
+  closing section states "Coming soon to the App Store" as a non-link and the
+  CTA points at the merch instead. **Do not add an App Store button until
+  there is a real `apps.apple.com` URL.**
 
 ## What's Built
 
-- `src/assets/merch/v1-tee-{front,back}.jpg` — done. Real 2000×2000 mockups, committed.
-- `src/data/products.ts` — done. `images` typed `ImageMetadata`; `productUrl()`/`isLive()`.
-- `src/components/ProductCard.astro` — done. `<Image>`, plus `height:auto` bug fix.
-- `src/pages/merch/[slug].astro` — done. Cross-fading stage, real `<button>` thumbnails,
-  keyboard operable, `prefers-reduced-motion` respected.
-- `src/styles/global.css` — done. `--ab-accent-text: #4a633f` (6.07:1).
-- `src/data/site.ts` — done. Points at `https://shop.amorbudget.com`.
-- Shopify theme "Amor Budget brand" (`gid://shopify/OnlineStoreTheme/190048370761`) —
-  **built, UNPUBLISHED**. Cream/sage palette, Nunito, pill buttons.
-- Shopify product media alt text — done, both records updated via `fileUpdate`.
+### New components
+
+- `HowItWorks.astro` — dark band, "One number. / *Zero stress.*", three
+  numbered steps, four stat cards (1 / 2 / 0 / Secs).
+- `Privacy.astro` — olive band, three point cards.
+- `Closing.astro` — dark band, coming-soon status pill, merch CTA.
+
+### Rewritten
+
+- `Hero.astro` — Fraunces headline with tinted italics, trust pills, primary +
+  text-link CTAs, new screenshot.
+- `Merch.astro` — **the main piece.** Native scroll-snap carousel over all six
+  products, prev/next buttons, and a six-up thumbnail strip that doubles as the
+  control surface. Every "Buy now" goes straight to
+  `shop.amorbudget.com/products/<handle>`.
+- `Features.astro` — four equal pastel-tinted cards (sage/blush/gold/cream)
+  replacing the old bento grid.
+- `products.ts` — **all six live products**, up from one. Prices and copy taken
+  from `shop.amorbudget.com/products.json`, not written fresh.
+- `index.astro` — order is Hero → **Merch** → HowItWorks → Features → Privacy →
+  Closing. Merch is second at the user's request.
+- `global.css` — Fraunces import, `--ab-display`, `--ab-sand`, `.ital` +
+  `.ital-olive` / `.ital-blush`, and the `.band` / `.band-dark` /
+  `.band-accent` / `.band-sand` full-bleed system.
+
+### New screenshot
+
+`src/assets/screenshots/home.png` is now a real 1290×2796 (3x) render of the
+running app's Home tab, not an export. Produced by driving headless Chrome over
+CDP: seeds a fake Supabase session in localStorage under
+`sb-iyxnvffjxpqwnqktgclr-auth-token` and stubs every `/rest/v1/*` call, the same
+technique `cypress/e2e/home-glance.cy.ts` uses. **Nothing was written into the
+amor-budget repo.** The script is disposable and lives in the session
+scratchpad; re-derive it from the Cypress spec if another shot is needed.
+
+## Two accessibility bugs found and fixed
+
+Both were pre-existing, and both were caught by measuring rather than by eye:
+
+1. **`.btn-primary` failed AA.** Cream on `--ab-accent` (#5f7a52) is 4.34:1
+   against a 4.5:1 floor for its 14–16px label. Now filled with
+   `--ab-accent-hover` (#4a633f, 6.06:1); hover went to `#3b5233`.
+   `--ab-accent` is still the brand colour anywhere it carries no text.
+2. **The olive band was unreadable at body size.** Cream at 0.86 on the old
+   `#6f8b61 → #5f7a52 → #4a633f` ramp measured 3.68:1, and the 10% white radial
+   over it took the lightest corner to 3.1:1. The ramp is now
+   `#526a43 → #465c39 → #3a4e30` with no white wash (lightest stop 5.45:1), the
+   lede is full cream, and the point cards are darkened rather than lightened.
 
 ## Verification Status
 
-Last verification: **PASS** (2026-08-06, production). No `.claude/build-log.md` exists;
-this project has no test runner, so verification is build + built-HTML assertions +
-live curl + browser check.
+Last verification: **PASS**, all measured, not eyeballed.
 
-- `npm run build` passes, 3 pages.
-- Production `/merch` and `/merch/v1-launch-tee` both 200, placeholder gone,
-  2 stage images + 2 thumb buttons, WebP srcsets present.
-- Buy link → `shop.amorbudget.com` returns 200 with no redirect hop.
-- Gallery swap verified in-browser by mouse and by keyboard (focus ring + Enter).
-- Live Horizon theme confirmed unchanged after all theme writes.
-
-## Active Goals
-
-- Get the branded Shopify theme live so the purchase path is on-brand end to end.
+- `npx astro build` clean, 8 pages (home, /merch, six product pages).
+- **Carousel functional test, 13/13 pass** — buttons reveal, prev disabled at
+  start, next advances the track (0 → 1144px), active thumbnail follows, thumb
+  click jumps to the last slide, next disables at the end, the page does not
+  scroll vertically when the carousel is driven, all six Buy links point at
+  `shop.amorbudget.com/products/`, zero horizontal page overflow.
+- **All 7 shop URLs return HTTP 200** (six products + storefront root).
+- **Contrast audit clean** at 1440px and 390px on `/`, and at 1440px on
+  `/merch` and a product page. The auditor walks every text node, resolves the
+  effective background through ancestors, resolves gradients to their lightest
+  stop, and applies the large-text threshold by computed size and weight.
+- Rendered and reviewed at 1440px desktop and 390px mobile.
 
 ## Open Blockers
 
-- **Theme publish is blocked to Claude.** `themePublish` validates against Shopify's
-  schema, but the MCP server's safety policy refuses it by design ("making a theme
-  live must be done manually"). **The user must publish by hand:**
-  Shopify Admin → Online Store → Themes → "Amor Budget brand" → ⋯ → Publish.
-  Direct link: `https://admin.shopify.com/store/tcniga-y0/themes`
-  Rollback is easy: the original Horizon theme is still in the library, so
-  republishing it reverts everything.
+1. **The store still cannot take money.** Shopify Payments was never activated;
+   see the go-live checklist below. Every "Buy now" this redesign added lands on
+   a product page with a dead checkout until that is done. **This is now the
+   single highest-value thing left**, because merch is the second section on the
+   homepage.
+2. **`designs/` is untracked and is not this session's work** — a second-product
+   concept written 2026-08-07 by another agent in the same tree. It was
+   deliberately left out of the commit. Only one agent should hold this tree.
+3. Draft Shopify theme `Amor Budget brand v2` (`190057545801`) may still need
+   publishing — carried over, not re-checked this session.
+
+## Known Flaws (deferred, not bugs)
+
+- The hero has generous empty space below the copy column on wide desktop; the
+  device sets the row height. Not wrong, just loose.
+- `Secs` sits among `1 / 2 / 0` in the stat row. Deliberate — every numeric
+  alternative would have been an invented claim about setup time or price.
+- Product photos are Printful mockups on pure white. They now sit on a tinted
+  panel with `mix-blend-mode: multiply`, which is what stops them reading as
+  white rectangles, but real photography would be better.
+- Nav "Merch" points at `/merch`, while the hero and closing CTAs point at the
+  homepage `#merch` section. Both work; they are not the same destination.
+
+## Store go-live checklist (unchanged, nothing done)
+
+1. **Activate Shopify Payments** — needs legal name, EIN/SSN, DOB, bank details.
+   **The user must do this; Claude is not permitted to enter financial or
+   identity credentials.**
+2. Enable Apple Pay / Google Pay / Shop Pay wallets.
+3. Add a Printful billing method, or paid orders sit unfulfilled silently.
+4. Write the missing policies — refund, shipping, terms all 404 today.
+5. Set up US tax collection (nexus in Texas).
+6. Place a test order in test mode, then turn test mode off.
 
 ## Next 3 Actions (in order)
 
-1. **Confirm the user published the theme, then verify**: check `themes` role flipped
-   to `MAIN` for `190048370761`, curl the live product page for `nunito` and `f7f4ec`,
-   and re-confirm `amorbudget.com/merch` Buy still returns 200.
-2. **Decide the Shopify home page content.** It still shows Horizon's stock hero
-   ("Browse our latest products" over a generic illustration). That is section content
-   in `templates/index.json`, not theme styling, and needs the user's copy decision.
-   Low urgency: buyers arrive at the product page directly from `/merch`.
-3. **Offer the site-wide contrast follow-up.** 8 usages of `color: var(--ab-accent)`
-   still measure 4.35:1 in `Hero`, `Nav`, `Footer`, `Features`, `Resources`. The
-   `--ab-accent-text` token exists, so it is a find-and-replace. Deliberately left
-   out of scope this session.
-
-## Deferred, with reasons
-
-- **View transitions** (spec item A5): Astro renamed `ViewTransitions` to `ClientRouter`
-  in v5 and this project is on 7.1.4. Needs a docs check before implementing; lowest
-  value item on the list.
-- **Catalog stagger** (spec item A7): `data-reveal` already fires on the merch grid.
-  A second animation would mean a new dependency for one card. Revisit when the
-  catalog grows.
-- **Custom CSS on the Shopify theme**: palette + radius settings carried the brand
-  without it; an asset file is maintenance across theme updates for shadow softness alone.
-
-## Gotchas discovered this session
-
-- **The shirt is NOT the heart piggy bank on forest green.** It is a multicolor
-  "AMOR BUDGET" wordmark in stacked overlapping letters on a cream American Apparel
-  1301GD. `docs/superpowers/specs/2026-08-06-merch-printify-design.md` describes the
-  old plan and is **stale on garment and artwork**. Alt text was written from looking
-  at the actual image.
-- **`<Image>` emits `height="2000"`**, and that presentational attribute beats
-  `aspect-ratio` unless the rule also sets `height: auto`. This silently rendered a
-  2000px-tall crop on the catalog card.
-- **Astro does not strict-typecheck `.astro` templates.** A build can pass while
-  emitting `src="[object Object]"`. Assert against built HTML, not just exit code.
-- **Scoped styles land in `dist/_astro/*.css`, not inline HTML** in production builds.
-  Grepping the HTML for a media query gives a false negative.
-- **Horizon caps `card_corner_radius` and `popover_border_radius` at 16.** The API
-  rejects higher, so `--radius-lg` (28px) cannot be matched on Shopify cards.
-- **Nunito IS in Shopify's font library** as `nunito_n4` / `nunito_n7`. Verified by
-  the preview serving `nunito_n4...woff2`.
-- **Shopify blocks these via MCP**: theme publish, storefront password protection,
-  shop address, domain creation. All are manual admin actions.
+1. **Get Shopify Payments live.** The redesign has made merch the headline
+   conversion path; it currently dead-ends.
+2. Review the redesign at desktop width and say which way the hero spacing
+   should go — tighter, or leave it.
+3. Commit is on `redesign/homepage-2026-08`; open the PR against `main` when the
+   user has looked at it.
 
 ## Resume Prompt
 
-Copy-paste this into a fresh session:
-
-> Read `.claude/HANDOFF.md` and `.claude/PROJECT.md` in
-> `/Users/vubl/projects/amorbudget-site`, then continue from "Next 3 Actions" item 1.
-> Do not re-ask intake questions. Current phase: ship.
+> Read `.claude/HANDOFF.md` in `/Users/vubl/projects/amorbudget-site`. The
+> homepage redesign is done, committed on `redesign/homepage-2026-08`, and
+> verified. Continue from "Next 3 Actions". Do not re-ask intake questions.
 
 ## Files Touched This Session
 
-Commits `5cc3115`, `25b3baa`, `f131e4f`, `5b560af`, `307d79a`, `4434e23` — all pushed,
-working tree clean.
+Modified: `src/components/Hero.astro`, `src/components/Features.astro`,
+`src/components/Merch.astro`, `src/data/products.ts`, `src/pages/index.astro`,
+`src/styles/global.css`, `src/assets/screenshots/home.png`, `package.json`,
+`package-lock.json`, `.claude/HANDOFF.md`, `.claude/PROJECT.md`
 
-```
-docs/superpowers/plans/2026-08-06-merch-storefront-modernization.md   | 624 ++
-docs/superpowers/specs/2026-08-06-merch-storefront-modernization-design.md | 110 ++
-src/assets/merch/v1-tee-back.jpg                                      | Bin
-src/assets/merch/v1-tee-front.jpg                                     | Bin
-src/components/ProductCard.astro                                      |  14 +-
-src/data/products.ts                                                  |  17 +-
-src/data/site.ts                                                      |   2 +-
-src/pages/merch/[slug].astro                                          | 128 +-
-src/pages/merch/index.astro                                           |   4 +-
-src/styles/global.css                                                 |   8 +-
-```
+Added: `src/components/HowItWorks.astro`, `src/components/Privacy.astro`,
+`src/components/Closing.astro`, ten product images in `src/assets/merch/`
 
-Changed outside the repo (Shopify, not version controlled):
-- Theme `190048370761` "Amor Budget brand" created, `config/settings_data.json` written.
-- Product media alt text on `MediaImage/71843415457865` and `.../71843415490633`.
+Not touched: `Nav.astro`, `Footer.astro`, `Layout.astro`, `ProductCard.astro`,
+`src/pages/merch/*`, `designs/`, and the entire `amor-budget` app repo.

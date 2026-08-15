@@ -4,6 +4,15 @@
 @import '@fontsource/nunito/800.css';
 @import '@fontsource/nunito/900.css';
 
+/*
+ * Fraunces carries the display type; Nunito still owns body, UI and the brand
+ * lockup so the site keeps matching the iOS app and the Shopify storefront.
+ * The opsz cut ships the weight and optical-size axes only — SOFT and WONK
+ * live in separate files we don't load, so don't reach for them below.
+ */
+@import '@fontsource-variable/fraunces/opsz.css';
+@import '@fontsource-variable/fraunces/opsz-italic.css';
+
 :root {
   /* Amor Budget "Olive & Blush" — app-aligned brand tokens */
   --ab-bg: #f7f4ec;
@@ -42,7 +51,12 @@
   --muted-on-ink: #b7bca8;
   --ink-deep: #1c1e17;
 
+  /* Deeper cream for the merch band, so it separates from --ab-bg without
+   * introducing a colour the palette doesn't already own. */
+  --ab-sand: #efe7d7;
+
   --ab-font: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ab-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
 
   --space-1: 8px;
   --space-2: 16px;
@@ -152,6 +166,78 @@ a {
   }
 }
 
+/* ---------- full-bleed bands ---------- */
+
+/*
+ * The page used to be one uninterrupted cream scroll. These bands give it a
+ * rhythm — cream, dark, cream, olive, sand, dark — so each section announces
+ * itself before you've read a word of it.
+ */
+.band {
+  position: relative;
+  z-index: 0;
+}
+
+.band-dark {
+  background: var(--ink-deep);
+  color: var(--ab-accent-on);
+}
+
+.band-dark .h1,
+.band-dark .h2,
+.band-dark .h3 {
+  color: var(--ab-accent-on);
+}
+
+.band-dark .lede {
+  color: var(--muted-on-ink);
+}
+
+/*
+ * Deeper than --ab-accent on purpose, and with no white wash over it.
+ * Cream body copy on the brand olive measures 4.34:1, under the 4.5:1 floor,
+ * and a 10% white radial at the top corner dropped it to 3.1:1. This ramp
+ * keeps the lightest stop at 5.45:1 for full-cream text. Lighten any stop and
+ * the paragraph on this band stops being legible enough to ship.
+ */
+.band-accent {
+  background: linear-gradient(155deg, #526a43 0%, #465c39 55%, #3a4e30 100%);
+  color: var(--ab-accent-on);
+}
+
+.band-accent .h1,
+.band-accent .h2,
+.band-accent .h3 {
+  color: var(--ab-accent-on);
+}
+
+/* Full cream, not a fade — see the contrast note on .band-accent. */
+.band-accent .lede {
+  color: var(--ab-accent-on);
+}
+
+.band-sand {
+  background: var(--ab-sand);
+}
+
+/* Section eyebrow without the pill chrome — the bands already frame it. */
+.eyebrow-bare {
+  margin: 0 0 var(--space-2);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ab-accent-text);
+}
+
+.band-dark .eyebrow-bare {
+  color: var(--ab-wants);
+}
+
+.band-accent .eyebrow-bare {
+  color: var(--ab-gold-soft);
+}
+
 /* ---------- type ---------- */
 
 .eyebrow {
@@ -170,24 +256,77 @@ a {
   border: 1px solid color-mix(in srgb, var(--ab-accent) 12%, transparent);
 }
 
-.h1 {
-  font-size: clamp(2.6rem, 6.2vw, 4.75rem);
-  font-weight: 900;
-  letter-spacing: -0.045em;
-  line-height: 1.02;
+/*
+ * Display type is Fraunces at opsz 144 — the display cut, where the contrast
+ * between thick and thin strokes is highest. Fraunces reads small for its
+ * point size, so these run larger than the Nunito headings they replaced.
+ * Weight stays at 700: 900 closes the counters at this size and turns the
+ * headline into a solid block.
+ */
+.h1,
+.h2,
+.h3 {
+  font-family: var(--ab-display);
+  font-variation-settings: 'opsz' 144;
+  font-weight: 700;
   color: var(--ab-ink);
   margin: 0;
   text-wrap: balance;
 }
 
+.h1 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  letter-spacing: -0.03em;
+  line-height: 0.94;
+}
+
 .h2 {
-  font-size: clamp(1.85rem, 3.6vw, 3rem);
-  font-weight: 900;
-  letter-spacing: -0.035em;
-  line-height: 1.08;
-  color: var(--ab-ink);
-  margin: 0;
-  text-wrap: balance;
+  font-size: clamp(2.1rem, 4.4vw, 3.6rem);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.h3 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/*
+ * The one gesture the whole redesign hangs on: a phrase inside the headline
+ * set in Fraunces italic and tinted. Two tints only — olive carries the
+ * product ideas, blush the human ones. A third would make it decoration.
+ *
+ * Both are used at display sizes exclusively, where WCAG's 3:1 large-text
+ * floor applies: olive is 4.35:1 on cream and blush-text 4.4:1, so both clear
+ * it with room. Do not reuse these at body size.
+ */
+.ital {
+  font-style: italic;
+  font-variation-settings: 'opsz' 144;
+}
+
+.ital-olive {
+  color: var(--ab-accent);
+}
+
+.ital-blush {
+  color: var(--ab-wants-text);
+}
+
+/* On the dark and olive bands the tints invert — cream stays the base and the
+ * italic lifts to the soft tint so it reads against the deep ground. */
+.on-dark .ital-olive {
+  color: #a9c199;
+}
+
+.on-dark .ital-blush {
+  color: var(--ab-wants);
+}
+
+.on-accent .ital-olive,
+.on-accent .ital-blush {
+  color: var(--ab-gold-soft);
 }
 
 .lede {
@@ -242,8 +381,14 @@ a {
   transform: translate(2px, -1px) scale(1.05);
 }
 
+/*
+ * Filled with --ab-accent-hover, not --ab-accent. Cream on the brand olive is
+ * 4.34:1, which fails AA for the 14-16px label sitting on it; the darker olive
+ * is 6.06:1. The lighter tone is still the brand colour everywhere it carries
+ * no text — fills, borders, icons, bars.
+ */
 .btn-primary {
-  background: var(--ab-accent);
+  background: var(--ab-accent-hover);
   color: var(--ab-accent-on);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.12) inset,
@@ -256,7 +401,7 @@ a {
 }
 
 .btn-primary:hover {
-  background: var(--ab-accent-hover);
+  background: #3b5233;
   transform: translateY(-2px);
   box-shadow: 0 16px 32px -12px rgba(79, 103, 67, 0.5);
 }

@@ -1,0 +1,170 @@
+---
+/*
+ * Deliberately narrower than the Figma comp, which claimed "no cloud sync"
+ * and "your data never leaves your phone". Amor Budget syncs through Supabase,
+ * so both would be false. What IS true is the bank story: no credentials, no
+ * OAuth handshake, no aggregator in the middle — which is the part people
+ * actually hesitate over. Do not widen these claims without checking the app.
+ */
+const points = [
+  {
+    title: 'No bank logins',
+    body: 'You never hand over a banking password.',
+    icon: '<path d="M12 4.5 5.5 7v5c0 4.2 2.8 7 6.5 8.5 3.7-1.5 6.5-4.3 6.5-8.5V7L12 4.5Z" /><path d="m9 12 2 2 4-4" />',
+  },
+  {
+    title: 'No aggregators',
+    body: 'No third party sits between you and your accounts.',
+    icon: '<circle cx="12" cy="12" r="7.5" /><path d="M4.5 12h15M12 4.5c2 2.4 3 4.9 3 7.5s-1 5.1-3 7.5c-2-2.4-3-4.9-3-7.5s1-5.1 3-7.5Z" />',
+  },
+  {
+    title: 'You log it',
+    body: 'Spending goes in by hand, in seconds, on purpose.',
+    icon: '<path d="M4 19.5 8 18.5 19 7.5a2.1 2.1 0 0 0-3-3L5 15.5Z" /><path d="m14.5 6 3 3" />',
+  },
+];
+---
+
+<section class="section band band-accent on-accent privacy">
+  <div class="container privacy-grid">
+    <div data-reveal>
+      <p class="eyebrow-bare">Privacy</p>
+      <h2 class="h2">
+        Your money is private.<br />
+        <em class="ital ital-olive">We mean it.</em>
+      </h2>
+      <p class="lede">
+        Amor Budget never asks for a bank login and never routes your accounts
+        through a third-party aggregator. You enter what you spend, and that
+        stays between you and the app.
+      </p>
+    </div>
+
+    <ul class="points" data-reveal>
+      {
+        points.map((p) => (
+          <li class="point">
+            <svg
+              class="point-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              set:html={p.icon}
+            />
+            <h3 class="point-title">{p.title}</h3>
+            <p class="point-body">{p.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* A single soft disc bottom-right, echoing the comp's decorative circle.
+   * overflow:clip keeps it from widening the page. */
+  .privacy {
+    position: relative;
+    overflow: clip;
+  }
+
+  .privacy::after {
+    content: '';
+    position: absolute;
+    right: -8%;
+    bottom: -55%;
+    width: min(460px, 46vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+  }
+
+  .privacy-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: center;
+    gap: clamp(36px, 5vw, 72px);
+  }
+
+  .privacy-grid .h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .privacy-grid .lede {
+    max-width: 46ch;
+  }
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  /*
+   * Darkened, not lightened. A white tint here raised the ground under the
+   * caption to 2.95:1; going the other way puts it at 5.5:1 and still reads
+   * as a raised card against the band.
+   */
+  .point {
+    padding: 20px 16px;
+    border-radius: var(--radius-md);
+    background: rgba(28, 30, 23, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .point-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--ab-accent-on);
+    margin-bottom: 12px;
+  }
+
+  .point-title {
+    margin: 0 0 4px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--ab-accent-on);
+  }
+
+  .point-body {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: rgba(247, 244, 233, 0.9);
+  }
+
+  @media (max-width: 900px) {
+    .privacy-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .points {
+      grid-template-columns: 1fr;
+    }
+
+    .point {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: 14px;
+      align-items: center;
+    }
+
+    .point-icon {
+      grid-row: 1 / 3;
+      margin-bottom: 0;
+    }
+  }
+</style>

@@ -1,25 +1,34 @@
 ---
+/*
+ * Four cards, each tinted with one of the brand's own soft tokens. The bento
+ * grid this replaced put one feature on a big olive slab and the other three
+ * on white — which read as a hierarchy the product doesn't actually have.
+ * All four matter equally, so all four get the same weight and their own hue.
+ */
 const features = [
   {
     title: 'Needs vs Wants',
-    body: 'Every dollar lands in one of two buckets: essentials, or everything else.',
+    body: 'Two buckets, and every dollar lands in one of them: what you must pay, and what you choose to spend. Clarity without judgment.',
     icon: 'home',
-    featured: true,
+    tone: 'sage',
   },
   {
     title: 'Bills warn you early',
-    body: 'Due dates show up days ahead. No surprises.',
+    body: "Due dates surface days ahead, so you're never caught off guard mid-month. Your future self will thank you.",
     icon: 'bell',
+    tone: 'blush',
   },
   {
     title: 'One number for today',
-    body: "What's safe to spend, after bills and savings.",
+    body: "After bills and savings are carved out, one clear number tells you exactly what's safe to spend. Right now. Today.",
     icon: 'spark',
+    tone: 'gold',
   },
   {
     title: 'No bank linking',
-    body: 'Log spending in seconds. Nothing to connect.',
+    body: 'Quick manual logging keeps you intentional. Nothing to connect, no bank credentials, no third-party access.',
     icon: 'shield',
+    tone: 'cream',
   },
 ];
 
@@ -34,34 +43,40 @@ const icons: Record<string, string> = {
 <section id="features" class="section features">
   <div class="container">
     <header class="features-head" data-reveal>
-      <p class="eyebrow">Features</p>
-      <h2 class="h2">The whole app, in four ideas.</h2>
+      <h2 class="h2">
+        Built around how<br />
+        <em class="ital ital-blush">real people</em> budget.
+      </h2>
+      <div class="features-head-aside">
+        <p class="eyebrow-bare">Features</p>
+        <p class="lede">
+          No spreadsheets. No complicated dashboards. Amor Budget is stripped
+          to the essentials so you actually stick with it.
+        </p>
+      </div>
     </header>
 
-    <ul class="bento">
+    <ul class="cards">
       {
         features.map((f, i) => (
           <li
-            class:list={['bento-item', f.featured && 'is-featured']}
+            class={`card card-${f.tone}`}
             data-reveal
             style={`transition-delay: ${i * 80}ms`}
           >
-            <div class="bento-shell">
-              <div class="bento-card">
-                <svg
-                  class="feature-icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  set:html={icons[f.icon]}
-                />
-                <h3 class="feature-title">{f.title}</h3>
-                <p class="feature-body">{f.body}</p>
-              </div>
-            </div>
+            <svg
+              class="card-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              set:html={icons[f.icon]}
+            />
+            <h3 class="card-title">{f.title}</h3>
+            <p class="card-body">{f.body}</p>
           </li>
         ))
       }
@@ -71,165 +86,158 @@ const icons: Record<string, string> = {
 
 <style>
   .features-head {
-    max-width: 38rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    align-items: end;
+    gap: var(--space-3) clamp(24px, 5vw, 64px);
     margin-bottom: var(--space-5);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
   }
 
-  .bento {
+  .features-head-aside .lede {
+    max-width: 38ch;
+  }
+
+  .cards {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1.2fr 1fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
   }
 
-  .bento-item:first-child {
-    grid-column: 1;
-    grid-row: 1 / 3;
-  }
-
-  .bento-item:nth-child(2) {
-    grid-column: 2 / 4;
-    grid-row: 1;
-  }
-
-  .bento-item:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  .bento-item:nth-child(4) {
-    grid-column: 3;
-    grid-row: 2;
-  }
-
-  .bento-shell {
-    height: 100%;
-    padding: 5px;
-    border-radius: var(--radius-xl);
-    background: color-mix(in srgb, var(--ab-ink) 4%, transparent);
-    border: 1px solid var(--ab-border);
+  .card {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(22px, 2.4vw, 30px);
+    border-radius: var(--radius-lg);
+    border: 1px solid transparent;
     transition:
-      transform 400ms var(--ease-spring),
-      box-shadow 400ms var(--ease-spring);
+      transform 420ms var(--ease-spring),
+      box-shadow 420ms var(--ease-spring);
   }
 
-  .bento-item:hover .bento-shell {
-    transform: translateY(-5px);
+  /*
+   * data-reveal owns transform while the card is animating in, so the hover
+   * lift is only attached once the card has landed. Without :not(), hovering
+   * mid-reveal cancels the entrance and the card snaps into place.
+   */
+  .card.is-visible:hover,
+  html:not(.js) .card:hover {
+    transform: translateY(-6px);
     box-shadow: var(--shadow-card);
   }
 
-  .bento-card {
-    height: 100%;
-    min-height: 180px;
-    padding: var(--space-4);
-    border-radius: calc(var(--radius-xl) - 4px);
-    background: var(--ab-surface-raised);
-    border: 1px solid var(--ab-border);
-    box-shadow: var(--shadow-inset);
-    display: flex;
-    flex-direction: column;
+  .card-sage {
+    background: var(--ab-accent-soft);
+    border-color: color-mix(in srgb, var(--ab-accent) 18%, transparent);
   }
 
-  .is-featured .bento-shell {
-    background: color-mix(in srgb, var(--ab-accent) 18%, transparent);
-    border-color: color-mix(in srgb, var(--ab-accent) 22%, transparent);
+  .card-blush {
+    background: var(--ab-wants-soft);
+    border-color: color-mix(in srgb, var(--ab-wants) 32%, transparent);
   }
 
-  .is-featured .bento-card {
-    background: linear-gradient(165deg, #6a875c 0%, var(--ab-accent) 48%, #4f6743 100%);
-    border-color: transparent;
-    justify-content: center;
-    min-height: 100%;
-    padding: clamp(28px, 4vw, 48px);
+  .card-gold {
+    background: var(--ab-gold-soft);
+    border-color: color-mix(in srgb, var(--ab-gold) 30%, transparent);
   }
 
-  .feature-icon {
+  .card-cream {
+    background: var(--ab-bg-deep);
+    border-color: var(--ab-border-strong);
+  }
+
+  .card-icon {
     width: 22px;
     height: 22px;
-    color: var(--ab-accent);
-    background: var(--ab-accent-soft);
-    border-radius: 12px;
     padding: 11px;
     box-sizing: content-box;
-    margin-bottom: var(--space-2);
+    border-radius: 14px;
+    background: var(--ab-surface-raised);
+    margin-bottom: var(--space-3);
     flex-shrink: 0;
+    box-shadow: var(--shadow-soft);
   }
 
-  .is-featured .feature-icon {
-    width: 28px;
-    height: 28px;
-    padding: 12px;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.14);
+  .card-sage .card-icon {
+    color: var(--ab-accent-text);
   }
 
-  .feature-title {
-    font-size: 1.1rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
+  .card-blush .card-icon {
+    color: var(--ab-wants-text);
+  }
+
+  .card-gold .card-icon {
+    color: var(--ab-gold-text);
+  }
+
+  .card-cream .card-icon {
     color: var(--ab-ink);
-    margin: 0 0 8px;
   }
 
-  .is-featured .feature-title {
-    font-size: clamp(1.35rem, 2vw, 1.75rem);
-    color: var(--ab-accent-on);
-    max-width: 14ch;
+  /*
+   * Card titles are display type too — small, but Fraunces. It's what ties
+   * these back to the headline above them rather than reading as a separate
+   * UI kit.
+   */
+  .card-title {
+    font-family: var(--ab-display);
+    font-variation-settings: 'opsz' 144;
+    font-weight: 700;
+    font-size: 1.18rem;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    margin: 0 0 10px;
   }
 
-  .feature-body {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--muted-copy);
+  .card-sage .card-title {
+    color: var(--ab-accent-text);
+  }
+
+  .card-blush .card-title {
+    color: var(--ab-wants-text);
+  }
+
+  .card-gold .card-title {
+    color: var(--ab-gold-text);
+  }
+
+  .card-cream .card-title {
+    color: var(--ab-ink);
+  }
+
+  .card-body {
     margin: 0;
+    font-size: 0.94rem;
+    font-weight: 600;
     line-height: 1.55;
+    color: var(--muted-copy);
   }
 
-  .is-featured .feature-body {
-    font-size: 1.02rem;
-    color: rgba(247, 244, 233, 0.96);
-    max-width: 30ch;
+  @media (max-width: 1020px) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   @media (max-width: 900px) {
-    .bento {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: none;
+    .features-head {
+      grid-template-columns: 1fr;
+      align-items: start;
     }
 
-    .bento-item:first-child,
-    .bento-item:nth-child(2),
-    .bento-item:nth-child(3),
-    .bento-item:nth-child(4) {
-      grid-column: auto;
-      grid-row: auto;
-    }
-
-    .bento-item:first-child {
-      grid-column: 1 / -1;
-    }
-
-    .bento-item:nth-child(2) {
-      grid-column: 1 / -1;
+    .features-head-aside {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 10px;
     }
   }
 
   @media (max-width: 560px) {
-    .bento {
+    .cards {
       grid-template-columns: 1fr;
-    }
-
-    .bento-item:first-child,
-    .bento-item:nth-child(2) {
-      grid-column: auto;
     }
   }
 </style>

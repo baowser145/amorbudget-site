@@ -1,0 +1,76 @@
+---
+/*
+ * The Figma closes on an "Download on the App Store" button. Amor Budget is
+ * not on the App Store yet, so shipping that button would be a dead link on
+ * the most prominent CTA of the page. The section keeps its shape and states
+ * the real status instead — and points at the one thing you can actually buy
+ * today, which is the merch.
+ */
+---
+
+<section class="section band band-dark on-dark closing">
+  <div class="container closing-inner" data-reveal>
+    <p class="eyebrow-bare">iOS app</p>
+    <h2 class="h2">
+      Start feeling better<br />
+      <em class="ital ital-olive">about money.</em>
+    </h2>
+    <p class="lede">
+      Amor Budget is coming to iPhone: one number that tells you what&rsquo;s
+      safe to spend, without linking a single bank account.
+    </p>
+
+    <p class="status">
+      <span class="status-dot" aria-hidden="true"></span>
+      Coming soon to the App Store
+    </p>
+
+    <a class="btn btn-primary" href="#merch">
+      Shop the merch
+      <span class="btn-icon" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .closing-inner {
+    max-width: 44rem;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .closing-inner .h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .closing-inner .lede {
+    max-width: 40ch;
+    margin-bottom: var(--space-4);
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 var(--space-3);
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 13.5px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--ab-accent-on);
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ab-gold);
+    box-shadow: 0 0 0 4px rgba(217, 180, 74, 0.18);
+  }
+</style>
