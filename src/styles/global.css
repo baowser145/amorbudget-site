@@ -1,18 +1,10 @@
-@import '@fontsource/nunito/400.css';
-@import '@fontsource/nunito/600.css';
-@import '@fontsource/nunito/700.css';
-@import '@fontsource/nunito/800.css';
-@import '@fontsource/nunito/900.css';
-
 /*
- * Fraunces carries the display type; Nunito still owns body, UI and the brand
- * lockup so the site keeps matching the iOS app and the Shopify storefront.
- * The opsz cut ships the weight and optical-size axes only — SOFT and WONK
- * live in separate files we don't load, so don't reach for them below.
+ * One family for everything: Helvetica Neue, system-installed on every Apple
+ * device (Arial catches Windows). Chosen 2026-08 when the user asked for a
+ * more readable face; it replaced self-hosted Nunito + Fraunces, so the site
+ * ships zero font files. Hierarchy comes from size and weight, not a second
+ * family. Note the iOS app and the shop wordmark still use Nunito.
  */
-@import '@fontsource-variable/fraunces/opsz.css';
-@import '@fontsource-variable/fraunces/opsz-italic.css';
-
 :root {
   /* Amor Budget "Olive & Blush" — app-aligned brand tokens */
   --ab-bg: #f7f4ec;
@@ -55,8 +47,8 @@
    * introducing a colour the palette doesn't already own. */
   --ab-sand: #efe7d7;
 
-  --ab-font: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
-  --ab-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --ab-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ab-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   --space-1: 8px;
   --space-2: 16px;
@@ -257,17 +249,13 @@ a {
 }
 
 /*
- * Display type is Fraunces at opsz 144 — the display cut, where the contrast
- * between thick and thin strokes is highest. Fraunces reads small for its
- * point size, so these run larger than the Nunito headings they replaced.
- * Weight stays at 700: 900 closes the counters at this size and turns the
- * headline into a solid block.
+ * Sizes sit a step below the Fraunces-era values: Fraunces read small for its
+ * point size and was compensated upward; Helvetica reads full-size.
  */
 .h1,
 .h2,
 .h3 {
   font-family: var(--ab-display);
-  font-variation-settings: 'opsz' 144;
   font-weight: 700;
   color: var(--ab-ink);
   margin: 0;
@@ -275,27 +263,27 @@ a {
 }
 
 .h1 {
-  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-size: clamp(2.7rem, 6.2vw, 4.8rem);
   letter-spacing: -0.03em;
-  line-height: 0.94;
+  line-height: 0.98;
 }
 
 .h2 {
-  font-size: clamp(2.1rem, 4.4vw, 3.6rem);
+  font-size: clamp(1.9rem, 3.9vw, 3.1rem);
   letter-spacing: -0.025em;
-  line-height: 1;
+  line-height: 1.04;
 }
 
 .h3 {
-  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
 /*
  * The one gesture the whole redesign hangs on: a phrase inside the headline
- * set in Fraunces italic and tinted. Two tints only — olive carries the
- * product ideas, blush the human ones. A third would make it decoration.
+ * set in italic and tinted. Two tints only — olive carries the product ideas,
+ * blush the human ones. A third would make it decoration.
  *
  * Both are used at display sizes exclusively, where WCAG's 3:1 large-text
  * floor applies: olive is 4.35:1 on cream and blush-text 4.4:1, so both clear
@@ -303,7 +291,6 @@ a {
  */
 .ital {
   font-style: italic;
-  font-variation-settings: 'opsz' 144;
 }
 
 .ital-olive {

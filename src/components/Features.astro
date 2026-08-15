@@ -20,14 +20,14 @@ const features = [
   },
   {
     title: 'One number for today',
-    body: "Bills and savings come out first. One number shows what's left.",
+    body: 'Open the app, read the number, done.',
     icon: 'spark',
     tone: 'gold',
   },
   {
-    title: 'No bank linking',
-    body: 'Log spending by hand in seconds. Nothing to connect, nothing to share.',
-    icon: 'shield',
+    title: 'Log spends in seconds',
+    body: 'Manual entry, so you notice every dollar.',
+    icon: 'pencil',
     tone: 'cream',
   },
 ];
@@ -36,7 +36,7 @@ const icons: Record<string, string> = {
   home: '<path d="M4 11.5 12 5l8 6.5" /><path d="M6 10v8.5a1 1 0 0 0 1 1h3.5v-5h3v5H17a1 1 0 0 0 1-1V10" />',
   bell: '<path d="M7 9a5 5 0 0 1 10 0c0 4 1.5 5.5 2 6.5H5c.5-1 2-2.5 2-6.5Z" /><path d="M10 19a2 2 0 0 0 4 0" />',
   spark: '<path d="M12 4v4M12 16v4M4 12h4M16 12h4" /><path d="m6.5 6.5 2.5 2.5M15 15l2.5 2.5M6.5 17.5 9 15M15 9l2.5-2.5" />',
-  shield: '<path d="M12 4.5 5.5 7v5c0 4.2 2.8 7 6.5 8.5 3.7-1.5 6.5-4.3 6.5-8.5V7L12 4.5Z" /><path d="m9 12 2 2 4-4" />',
+  pencil: '<path d="M4 19.5 8 18.5 19 7.5a2.1 2.1 0 0 0-3-3L5 15.5Z" /><path d="m14.5 6 3 3" />',
 };
 ---
 
@@ -182,7 +182,6 @@ const icons: Record<string, string> = {
    */
   .card-title {
     font-family: var(--ab-display);
-    font-variation-settings: 'opsz' 144;
     font-weight: 700;
     font-size: 1.18rem;
     letter-spacing: -0.015em;

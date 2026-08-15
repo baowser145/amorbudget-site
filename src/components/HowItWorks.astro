@@ -19,15 +19,17 @@ const steps = [
   {
     n: '03',
     title: 'Spend with confidence',
-    body: "One number: what's safe to spend today.",
+    body: 'Check your number before you buy.',
   },
 ];
 
+/* Figure + label only — the notes these cards used to carry repeated the
+ * Features and Privacy copy word for word (2026-08 dedupe pass). */
 const stats = [
-  { figure: '1', label: 'Number to know', note: "What's safe to spend today", tone: 'olive' },
-  { figure: '2', label: 'Buckets', note: 'Needs, and everything else', tone: 'blush' },
-  { figure: '0', label: 'Bank logins', note: 'Nothing to connect', tone: 'gold' },
-  { figure: 'Secs', label: 'To log a spend', note: 'Manual, on purpose', tone: 'cream' },
+  { figure: '1', label: 'Number to know', tone: 'olive' },
+  { figure: '2', label: 'Buckets', tone: 'blush' },
+  { figure: '0', label: 'Bank logins', tone: 'gold' },
+  { figure: 'Secs', label: 'To log a spend', tone: 'cream' },
 ];
 ---
 
@@ -39,11 +41,6 @@ const stats = [
         One number.<br />
         <em class="ital ital-olive">Zero stress.</em>
       </h2>
-      <p class="lede">
-        Amor Budget sets aside your bills and savings, then shows what&rsquo;s
-        left to spend today.
-      </p>
-
       <ol class="steps">
         {
           steps.map((s) => (
@@ -65,7 +62,6 @@ const stats = [
           <li class={`stat stat-${s.tone}`} style={`transition-delay: ${i * 70}ms`}>
             <p class="stat-figure">{s.figure}</p>
             <p class="stat-label">{s.label}</p>
-            <p class="stat-note">{s.note}</p>
           </li>
         ))
       }
@@ -82,11 +78,6 @@ const stats = [
   }
 
   .how-copy .h2 {
-    margin-bottom: var(--space-3);
-  }
-
-  .how-copy .lede {
-    max-width: 44ch;
     margin-bottom: var(--space-4);
   }
 
@@ -156,7 +147,6 @@ const stats = [
   .stat-figure {
     margin: 0 0 10px;
     font-family: var(--ab-display);
-    font-variation-settings: 'opsz' 144;
     font-weight: 700;
     font-size: clamp(2.1rem, 3.4vw, 2.9rem);
     letter-spacing: -0.03em;
@@ -184,13 +174,6 @@ const stats = [
     font-size: 0.95rem;
     font-weight: 800;
     color: var(--ab-accent-on);
-  }
-
-  .stat-note {
-    margin: 0;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--muted-on-ink);
   }
 
   @media (max-width: 900px) {

@@ -4,11 +4,13 @@ import homeShot from '../assets/screenshots/home.png';
 
 /*
  * The headline is the site tagline set as display type, with two phrases
- * pulled into tinted Fraunces italic. Splitting it across explicit lines is
+ * pulled into tinted italic. Splitting it across explicit lines is
  * deliberate: `text-wrap: balance` would re-break "you'll" and "love." onto
  * arbitrary lines and the colour would land in the wrong place.
+ *
+ * No trust pills here on purpose — the no-bank and manual-logging claims
+ * live once each, in Features and Privacy (2026-08 dedupe pass).
  */
-const trust = ['No bank linking', 'Private by design', 'Manual & quick'];
 ---
 
 <section id="top" class="hero">
@@ -26,11 +28,7 @@ const trust = ['No bank linking', 'Private by design', 'Manual & quick'];
         See what&rsquo;s safe to spend today, after bills and savings.
       </p>
 
-      <ul class="trust" data-hero-in style="--hero-in-order: 3">
-        {trust.map((t) => <li class="pill">{t}</li>)}
-      </ul>
-
-      <div class="hero-actions" data-hero-in style="--hero-in-order: 4">
+      <div class="hero-actions" data-hero-in style="--hero-in-order: 3">
         <a class="btn btn-primary" href="#how">
           See how it works
           <span class="btn-icon" aria-hidden="true">↓</span>
@@ -95,26 +93,6 @@ const trust = ['No bank linking', 'Private by design', 'Manual & quick'];
   .hero-copy .lede {
     max-width: 42ch;
     margin-bottom: var(--space-3);
-  }
-
-  .trust {
-    list-style: none;
-    margin: 0 0 var(--space-4);
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .pill {
-    padding: 9px 18px;
-    border-radius: 999px;
-    background: var(--ab-surface-raised);
-    border: 1px solid var(--ab-border-strong);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ab-ink);
-    box-shadow: var(--shadow-soft);
   }
 
   .hero-actions {
@@ -183,7 +161,6 @@ const trust = ['No bank linking', 'Private by design', 'Manual & quick'];
       margin-inline: auto;
     }
 
-    .trust,
     .hero-actions {
       justify-content: center;
     }
