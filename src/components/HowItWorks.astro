@@ -1,9 +1,10 @@
 ---
 /*
- * Every figure below traces back to a claim the site already makes in
- * Features.astro — buckets, bank linking, the one number, manual logging.
- * Nothing here states a price or a setup time, because neither is settled
- * and a stat card is the worst place to guess.
+ * Headline plus the three steps, full width. The stat-card grid that used to
+ * fill the right column was deleted 2026-08-15 — after losing its captions in
+ * the dedupe pass, every figure just restated a claim made elsewhere on the
+ * page. Don't reintroduce numbers here that aren't settled facts (price,
+ * setup time).
  */
 const steps = [
   {
@@ -22,72 +23,45 @@ const steps = [
     body: 'Check your number before you buy.',
   },
 ];
-
-/* Figure + label only — the notes these cards used to carry repeated the
- * Features and Privacy copy word for word (2026-08 dedupe pass). */
-const stats = [
-  { figure: '1', label: 'Number to know', tone: 'olive' },
-  { figure: '2', label: 'Buckets', tone: 'blush' },
-  { figure: '0', label: 'Bank logins', tone: 'gold' },
-  { figure: 'Secs', label: 'To log a spend', tone: 'cream' },
-];
 ---
 
 <section id="how" class="section band band-dark on-dark">
-  <div class="container how-grid">
-    <div class="how-copy" data-reveal>
+  <div class="container">
+    <div class="how-head" data-reveal>
       <p class="eyebrow-bare">How it works</p>
       <h2 class="h2">
-        One number.<br />
-        <em class="ital ital-olive">Zero stress.</em>
+        One number. <em class="ital ital-olive">Zero stress.</em>
       </h2>
-      <ol class="steps">
-        {
-          steps.map((s) => (
-            <li class="step">
-              <span class="step-n">{s.n}</span>
-              <div>
-                <h3 class="step-title">{s.title}</h3>
-                <p class="step-body">{s.body}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ol>
     </div>
 
-    <ul class="stats" data-reveal>
+    <ol class="steps" data-reveal>
       {
-        stats.map((s, i) => (
-          <li class={`stat stat-${s.tone}`} style={`transition-delay: ${i * 70}ms`}>
-            <p class="stat-figure">{s.figure}</p>
-            <p class="stat-label">{s.label}</p>
+        steps.map((s, i) => (
+          <li class="step" style={`transition-delay: ${i * 80}ms`}>
+            <span class="step-n">{s.n}</span>
+            <div>
+              <h3 class="step-title">{s.title}</h3>
+              <p class="step-body">{s.body}</p>
+            </div>
           </li>
         ))
       }
-    </ul>
+    </ol>
   </div>
 </section>
 
 <style>
-  .how-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    align-items: center;
-    gap: clamp(40px, 6vw, 80px);
-  }
-
-  .how-copy .h2 {
-    margin-bottom: var(--space-4);
+  .how-head {
+    margin-bottom: var(--space-5);
   }
 
   .steps {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 4vw, 56px);
   }
 
   .step {
@@ -126,65 +100,10 @@ const stats = [
     color: var(--muted-on-ink);
   }
 
-  /* ---------- stat cards ---------- */
-
-  .stats {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .stat {
-    padding: clamp(20px, 2.6vw, 30px);
-    border-radius: var(--radius-lg);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .stat-figure {
-    margin: 0 0 10px;
-    font-family: var(--ab-display);
-    font-weight: 700;
-    font-size: clamp(2.1rem, 3.4vw, 2.9rem);
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
-
-  .stat-olive .stat-figure {
-    color: #a9c199;
-  }
-
-  .stat-blush .stat-figure {
-    color: var(--ab-wants);
-  }
-
-  .stat-gold .stat-figure {
-    color: var(--ab-gold);
-  }
-
-  .stat-cream .stat-figure {
-    color: var(--ab-accent-on);
-  }
-
-  .stat-label {
-    margin: 0 0 4px;
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: var(--ab-accent-on);
-  }
-
   @media (max-width: 900px) {
-    .how-grid {
+    .steps {
       grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 420px) {
-    .stats {
-      grid-template-columns: 1fr;
+      gap: var(--space-3);
     }
   }
 </style>
