@@ -109,16 +109,34 @@ Last verification: **PASS**, all measured, not eyeballed.
 
 ## Open Blockers
 
-1. **The store still cannot take money.** Shopify Payments was never activated;
-   see the go-live checklist below. Every "Buy now" this redesign added lands on
-   a product page with a dead checkout until that is done. **This is now the
-   single highest-value thing left**, because merch is the second section on the
-   homepage.
-2. **`designs/` is untracked and is not this session's work** — a second-product
+1. **`designs/` is untracked and is not this session's work** — a second-product
    concept written 2026-08-07 by another agent in the same tree. It was
    deliberately left out of the commit. Only one agent should hold this tree.
-3. Draft Shopify theme `Amor Budget brand v2` (`190057545801`) may still need
+2. Draft Shopify theme `Amor Budget brand v2` (`190057545801`) may still need
    publishing — carried over, not re-checked this session.
+3. Order **#1001** (2026-08-14, $85.24, 2 items) is still `UNFULFILLED` while
+   the newer #1002 is `FULFILLED` and #1003 is `IN_PROGRESS`. Probably nothing,
+   but it is the odd one out and worth a glance.
+
+## The store is live and taking money (verified 2026-08-15)
+
+**Correcting this file's previous contents.** The 2026-08-07 handoff said
+Shopify Payments was never activated and carried a six-item go-live checklist.
+All of it is done, and this section replaces it. Checked directly:
+
+- `paymentSettings.supportedDigitalWallets` = `SHOPIFY_PAY, APPLE_PAY,
+  GOOGLE_PAY` — it was empty on 2026-08-07, which is what the old note recorded.
+- **Three orders, all `PAID`**: #1001 and #1002 on 2026-08-14, #1003 on
+  2026-08-15. #1002 is `FULFILLED`, which also proves Printful billing is set up
+  — a Printful order cannot ship without a payment method on file.
+- All four policy pages return 200: refund, privacy, terms, shipping.
+
+**Lesson for whoever reads this next: do not restate a blocker from a previous
+handoff without re-checking it.** This file asserted a dead checkout on a store
+that had taken three real orders, and that claim was repeated to the user.
+Store state is external and moves between sessions; the repo cannot tell you
+about it. Re-verify with `graphql_query` / `list-orders` before you say a word
+about it.
 
 ## Known Flaws (deferred, not bugs)
 
@@ -132,25 +150,13 @@ Last verification: **PASS**, all measured, not eyeballed.
 - Nav "Merch" points at `/merch`, while the hero and closing CTAs point at the
   homepage `#merch` section. Both work; they are not the same destination.
 
-## Store go-live checklist (unchanged, nothing done)
-
-1. **Activate Shopify Payments** — needs legal name, EIN/SSN, DOB, bank details.
-   **The user must do this; Claude is not permitted to enter financial or
-   identity credentials.**
-2. Enable Apple Pay / Google Pay / Shop Pay wallets.
-3. Add a Printful billing method, or paid orders sit unfulfilled silently.
-4. Write the missing policies — refund, shipping, terms all 404 today.
-5. Set up US tax collection (nexus in Texas).
-6. Place a test order in test mode, then turn test mode off.
-
 ## Next 3 Actions (in order)
 
-1. **Get Shopify Payments live.** The redesign has made merch the headline
-   conversion path; it currently dead-ends.
-2. Review the redesign at desktop width and say which way the hero spacing
+1. Review the redesign at desktop width and say which way the hero spacing
    should go — tighter, or leave it.
-3. Commit is on `redesign/homepage-2026-08`; open the PR against `main` when the
+2. Commit is on `redesign/homepage-2026-08`; open the PR against `main` once the
    user has looked at it.
+3. Glance at order #1001, still unfulfilled while a newer one has shipped.
 
 ## Resume Prompt
 
