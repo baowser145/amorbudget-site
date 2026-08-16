@@ -1,0 +1,67 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { site } from '../data/site';
+
+/*
+ * The Support URL filed with App Store Connect. Apple requires one that
+ * resolves without a login and gives a real way to reach a human, and a
+ * reviewer will open it. A homepage does not satisfy it.
+ *
+ * Written to answer the questions that arrive instead of merely offering an
+ * address: the three that will dominate early support are "where is my data",
+ * "how do I delete my account", and "the widget is blank".
+ */
+const email = site.contactEmail;
+---
+
+<LegalLayout
+  title="Support — Amor Budget"
+  description="Get help with Amor Budget: contact, account deletion, widget troubleshooting and common questions."
+  heading="Support"
+>
+  <p>
+    Write to <a href={`mailto:${email}`}>{email}</a> and a person reads it. We answer within two business days.
+    Tell us your iPhone model, the iOS version, and what you tapped just before things went wrong, and you will
+    usually save yourself a second email.
+  </p>
+
+  <h2>Delete your account</h2>
+  <p>
+    Open Profile in the app and choose to delete your account. Every transaction, budget, recurring bill and
+    savings account goes with it, and nobody can restore it afterwards. Ask us at{' '}
+    <a href={`mailto:${email}`}>{email}</a> if you would rather we handled it.
+  </p>
+
+  <h2>The widget is blank</h2>
+  <p>
+    Open Amor Budget once and let the Home screen load. The widget draws figures the app hands it, so a fresh
+    install has nothing to show until the app runs. The widget also clears itself when you sign out, and it refuses
+    to print yesterday's allowance as today's, so a blank one first thing in the morning means the app has not been
+    opened yet.
+  </p>
+
+  <h2>Reminders are not arriving</h2>
+  <p>
+    Check that notifications are on in Profile, then in iOS Settings under Amor Budget. Both have to be on. iOS
+    also holds notifications during Focus and Do Not Disturb, which catches most reports.
+  </p>
+
+  <h2>Do you connect to my bank?</h2>
+  <p>
+    No. You enter what you spend, which is why we never ask for a banking login and never sit between you and your
+    accounts. The <a href="/privacy">Privacy Policy</a> spells out what we do hold.
+  </p>
+
+  <h2>Reporting something worse</h2>
+  <p>
+    Found a security problem, or seen data that is not yours? Mail{' '}
+    <a href={`mailto:${email}`}>{email}</a> with the words "security" in the subject and we will treat it ahead of
+    everything else. Please give us a chance to fix it before you post it publicly.
+  </p>
+
+  <h2>The legal pages</h2>
+  <p>
+    <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>. Both also live inside the app,
+    under Profile.
+  </p>
+</LegalLayout>

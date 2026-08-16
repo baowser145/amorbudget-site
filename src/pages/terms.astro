@@ -1,0 +1,57 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { site } from '../data/site';
+
+/* Public twin of src/pages/Terms.tsx in the app repo. Keep the two in step. */
+const email = site.contactEmail;
+---
+
+<LegalLayout
+  title="Terms of Service — Amor Budget"
+  description="The terms you agree to when you create an Amor Budget account."
+  heading="Terms of Service"
+  updated="August 16, 2026"
+>
+  <p>Create an account and use Amor Budget, and you agree to what follows.</p>
+
+  <h2>The service</h2>
+  <p>
+    Amor Budget tracks your income and spending against a Needs, Wants and Savings split you set yourself. It
+    organises what you type in. It does not reach your bank, move your money, or advise you on what to do with it.
+  </p>
+
+  <h2>Your account</h2>
+  <p>
+    Keep your sign-in details to yourself, and enter figures you believe are right. The app works from what you
+    give it. You need to be old enough to enter a binding agreement where you live.
+  </p>
+
+  <h2>Acceptable use</h2>
+  <p>
+    Track your own household budget. Do not go after another user's data, do not disrupt the service for anyone
+    else, and do not use the app to break the law.
+  </p>
+
+  <h2>No warranty</h2>
+  <p>
+    We provide Amor Budget as it is. We work to keep it accurate and running, and we still cannot promise it will
+    never break or go offline. It stands in for no accountant and no financial adviser.
+  </p>
+
+  <h2>Ending your account</h2>
+  <p>
+    Delete your account whenever you like, from Profile. Your data goes with it, at once and for good. We may
+    suspend or close an account that breaks these terms.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    These terms will change as the app does. When something material changes, it appears here and the date at the
+    top of this page moves.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about any of this? Write to <a href={`mailto:${email}`}>{email}</a>.
+  </p>
+</LegalLayout>

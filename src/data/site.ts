@@ -5,7 +5,13 @@
 export const site = {
   name: 'Amor Budget',
   tagline: "Budgeting you'll actually love",
-  contactEmail: 'baohuylamvu@gmail.com',
+  /**
+   * Routed through Cloudflare Email Routing on amorbudget.com, not a personal
+   * inbox. It is the address filed as the App Store support contact, printed
+   * in the app's Privacy and Terms screens, and named in the domain's DMARC
+   * record, so it has to keep receiving for as long as the app is listed.
+   */
+  contactEmail: 'support@amorbudget.com',
 
   /**
    * Shopify storefront. Shopify cannot be hosted at amorbudget.com/merch —

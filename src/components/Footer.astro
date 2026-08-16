@@ -20,6 +20,12 @@ const year = new Date().getFullYear();
         <nav class="footer-nav" aria-label="Footer">
           <a href="/#features">Features</a>
           <a href={site.shop.url} target="_blank" rel="noopener noreferrer">Merch</a>
+          {/* App Store Connect requires the Privacy Policy and Support URLs to
+              resolve for anyone, and a reviewer opens them. Footer links are
+              also how a user who is not already looking for them finds them. */}
+          <a href="/support">Support</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
         </nav>
       </div>
       <div class="footer-bottom">

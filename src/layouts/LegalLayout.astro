@@ -1,0 +1,113 @@
+---
+import Layout from './Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+/*
+ * The shell for /privacy, /terms and /support.
+ *
+ * These three exist because App Store Connect demands a Privacy Policy URL and
+ * a Support URL that resolve for anyone, signed in or not. The app has carried
+ * its own Privacy and Terms screens for a while, but a screen inside the binary
+ * is not a URL Apple can open during review, and every one of these paths
+ * returned 404 until now.
+ *
+ * Long-form measure, not the marketing grid: this is text somebody reads
+ * top to bottom rather than scans in bands.
+ */
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  updated?: string;
+}
+
+const { title, description, heading, updated } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="legal">
+    <div class="container legal-shell">
+      <header class="legal-head">
+        <p class="eyebrow-bare">Amor Budget</p>
+        <h1 class="h1 legal-title">{heading}</h1>
+        {updated && <p class="legal-updated">Last updated {updated}</p>}
+      </header>
+      <div class="legal-body">
+        <slot />
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .legal {
+    padding: calc(var(--space-7) + 40px) 0 var(--space-6);
+  }
+
+  .legal-shell {
+    /* Narrower than the marketing container. Prose past about 70 characters a
+       line costs the reader their place on every wrap. */
+    max-width: 46rem;
+  }
+
+  .legal-head {
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--ab-border);
+  }
+
+  .legal-title {
+    margin: 6px 0 0;
+  }
+
+  .legal-updated {
+    margin: 12px 0 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted-copy);
+  }
+
+  .legal-body {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ab-ink);
+  }
+
+  .legal-body :global(h2) {
+    margin: var(--space-4) 0 var(--space-1);
+    font-size: 21px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .legal-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .legal-body :global(p) {
+    margin: 0 0 var(--space-2);
+  }
+
+  .legal-body :global(ul) {
+    margin: 0 0 var(--space-2);
+    padding-left: 1.25em;
+  }
+
+  .legal-body :global(li) {
+    margin-bottom: 10px;
+  }
+
+  .legal-body :global(a) {
+    color: var(--ab-accent-text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .legal-body :global(a:hover) {
+    color: var(--ab-accent-hover);
+  }
+</style>

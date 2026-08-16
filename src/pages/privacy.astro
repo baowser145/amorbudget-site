@@ -1,0 +1,99 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { site } from '../data/site';
+
+/*
+ * The public twin of src/pages/Privacy.tsx in the amor-budget app repo. Same
+ * facts, same wording, two places, because Apple needs a URL and the user needs
+ * the screen. Change one and change the other, or the app will be telling
+ * somebody something this page contradicts.
+ *
+ * Every claim is checkable in the app's code: no bank connection, row-level
+ * security on every table, no analytics dependency, and the widget's copy of
+ * the figures erased on sign-out.
+ */
+const email = site.contactEmail;
+---
+
+<LegalLayout
+  title="Privacy Policy — Amor Budget"
+  description="What Amor Budget collects, where it is stored, who else can see it, and how to delete it."
+  heading="Privacy Policy"
+  updated="August 16, 2026"
+>
+  <p>
+    Amor Budget tracks a budget you type in yourself. This page says what we hold, where it sits, who else can see
+    it, and how you get rid of it.
+  </p>
+
+  <h2>What we collect</h2>
+  <ul>
+    <li>
+      Your email address, so you can sign in. Sign in with Apple or Google instead and we receive whatever address
+      that provider hands us. Your Apple or Google password never reaches us.
+    </li>
+    <li>
+      Your password, if you set one, stored as a hash by our authentication provider. Nobody at Amor Budget can
+      read it back.
+    </li>
+    <li>
+      Your name, if you give one or your sign-in provider passes it along. It greets you on your own Home screen
+      and goes nowhere else.
+    </li>
+    <li>
+      The money you enter: income, expenses, categories, merchant names you type, savings accounts, bills, and the
+      Needs, Wants and Savings split you choose. We never connect to a bank and never ask for a banking login.
+    </li>
+    <li>
+      A push token for your device, if you switch on reminders. Apple needs it to deliver the notification and we
+      use it for nothing else.
+    </li>
+  </ul>
+
+  <h2>Where it sits</h2>
+  <p>
+    Your account and everything in it lives with Supabase, who provide our database and sign-in. Row-level security
+    guards every table and is scoped to your account, so another user cannot read your rows even if they go
+    looking.
+  </p>
+  <p>
+    The home screen widget works differently. Your phone keeps today's Wants figures in a private container that
+    only Amor Budget and its widget can open. That copy stays on the device, travels to no server, and is wiped
+    when you sign out.
+  </p>
+
+  <h2>Who else sees it</h2>
+  <p>
+    We sell your data to nobody and hand it to no advertiser. The app carries no analytics and no advertising code,
+    so nothing here follows you between apps or across the web.
+  </p>
+  <p>
+    Three outside parties touch it at all: Supabase, who store it; Apple, who deliver your reminders if you turn
+    them on; and Apple or Google, if you use one of them to sign in.
+  </p>
+
+  <h2>Deleting your data</h2>
+  <p>
+    Open Profile in the app and delete your account. That erases every transaction, budget, recurring bill and
+    savings account you have entered, and we cannot bring any of it back. Prefer that we do it for you? Write to{' '}
+    <a href={`mailto:${email}`}>{email}</a> and we will.
+  </p>
+
+  <h2>Children</h2>
+  <p>
+    Amor Budget is built for adults managing their own money. We do not aim it at children under 13 and we do not
+    knowingly keep their data. Tell us at <a href={`mailto:${email}`}>{email}</a> if a child has made an account
+    and we will remove it.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    When what we collect changes, this page changes with it and the date at the top moves. The same text appears
+    inside the app, under Profile.
+  </p>
+
+  <h2>Questions</h2>
+  <p>
+    Anything here unclear, or want to know what we hold on you? Reach us at <a href={`mailto:${email}`}>{email}</a>.
+  </p>
+</LegalLayout>
