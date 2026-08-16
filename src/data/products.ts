@@ -57,6 +57,36 @@ export interface Product {
 
 export const products: Product[] = [
   {
+    slug: 'app-icon-tee',
+    name: 'App Icon Tee',
+    shortName: 'App Icon Tee',
+    eyebrow: 'Garment dyed',
+    priceFrom: '$22',
+    tagline: 'The app icon and wordmark, in pixel type.',
+    blurb:
+      'The app icon, worn. The Amor Budget heart mark sits in its rounded olive tile next to the wordmark set in pixel type, printed across the chest in a single olive green on faded cream. A heavyweight tee with a broken-in feel from day one.',
+    handle: 'amor-budget-app-icon-tee',
+    images: [
+      {
+        src: appIconTee1,
+        alt: 'Front of the App Icon tee in faded cream, printed across the chest with the Amor Budget heart mark in a rounded olive tile beside the wordmark in pixel type.',
+      },
+      {
+        src: appIconTee2,
+        alt: 'Back of the App Icon tee in faded cream, unprinted, showing the relaxed cut and wide rib collar.',
+      },
+    ],
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    specs: [
+      '100% cotton',
+      '6.0 oz./yd.² (203.4 g/m²)',
+      'Relaxed fit',
+      'Garment-dyed for a vintage finish',
+      'Wide rib collar',
+    ],
+    note: 'Printed after you order, so allow 2 to 5 business days before it ships.',
+  },
+  {
     slug: 'heart-receipt-tee',
     name: 'Heart & Receipt Oversized Tee',
     shortName: 'Heart & Receipt',
@@ -145,36 +175,6 @@ export const products: Product[] = [
       'Centre chest print',
     ],
     note: 'Cut roomy on purpose. Size down for a closer fit.',
-  },
-  {
-    slug: 'app-icon-tee',
-    name: 'App Icon Tee',
-    shortName: 'App Icon Tee',
-    eyebrow: 'Garment dyed',
-    priceFrom: '$22',
-    tagline: 'The app icon and wordmark, in pixel type.',
-    blurb:
-      'The app icon, worn. The Amor Budget heart mark sits in its rounded olive tile next to the wordmark set in pixel type, printed across the chest in a single olive green on faded cream. A heavyweight tee with a broken-in feel from day one.',
-    handle: 'amor-budget-app-icon-tee',
-    images: [
-      {
-        src: appIconTee1,
-        alt: 'Front of the App Icon tee in faded cream, printed across the chest with the Amor Budget heart mark in a rounded olive tile beside the wordmark in pixel type.',
-      },
-      {
-        src: appIconTee2,
-        alt: 'Back of the App Icon tee in faded cream, unprinted, showing the relaxed cut and wide rib collar.',
-      },
-    ],
-    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
-    specs: [
-      '100% cotton',
-      '6.0 oz./yd.² (203.4 g/m²)',
-      'Relaxed fit',
-      'Garment-dyed for a vintage finish',
-      'Wide rib collar',
-    ],
-    note: 'Printed after you order, so allow 2 to 5 business days before it ships.',
   },
   {
     slug: 'v1-launch-tee',
