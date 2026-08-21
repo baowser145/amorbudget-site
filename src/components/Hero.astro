@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import homeShot from '../assets/screenshots/home.png';
+import { site } from '../data/site';
 
 /*
  * The headline is the site tagline set as display type, with two phrases
@@ -16,7 +17,7 @@ import homeShot from '../assets/screenshots/home.png';
 <section id="top" class="hero">
   <div class="container hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow" data-hero-in style="--hero-in-order: 0">Coming soon to iOS</p>
+      <p class="eyebrow" data-hero-in style="--hero-in-order: 0">Now on the App&nbsp;Store</p>
 
       <h1 class="h1 hero-title" data-hero-in style="--hero-in-order: 1">
         <span class="line">Budgeting</span>
@@ -29,7 +30,11 @@ import homeShot from '../assets/screenshots/home.png';
       </p>
 
       <div class="hero-actions" data-hero-in style="--hero-in-order: 3">
-        <a class="btn btn-primary" href="#how">
+        <a class="btn btn-primary" href={site.appStore.url} target="_blank" rel="noopener noreferrer">
+          {site.appStore.label}
+          <span class="btn-icon" aria-hidden="true">↗</span>
+        </a>
+        <a class="btn btn-ghost" href="#how">
           See how it works
           <span class="btn-icon" aria-hidden="true">↓</span>
         </a>

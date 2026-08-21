@@ -40,7 +40,12 @@ const links = [
         }
       </nav>
 
-      <a class="nav-cta btn btn-primary btn-plain" href="/#features">See how it works</a>
+      <a
+        class="nav-cta btn btn-primary btn-plain"
+        href={site.appStore.url}
+        target="_blank"
+        rel="noopener noreferrer">Download</a
+      >
     </div>
   </div>
 </header>
@@ -132,8 +137,8 @@ const links = [
   /*
    * Every link stays visible at every width — no hamburger. A phone user
    * reported not being able to find Merch when the links were hidden, so
-   * narrow screens tighten spacing and drop the redundant CTA instead
-   * ("Features" already points at #features).
+   * narrow screens tighten spacing and drop the CTA instead — on a phone
+   * the hero's App Store button is one scroll-stop below anyway.
    */
   @media (max-width: 860px) {
     .nav-cta {
