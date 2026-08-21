@@ -2,11 +2,10 @@
 import { site } from '../data/site';
 
 /*
- * The Figma closes on an "Download on the App Store" button. Amor Budget is
- * not on the App Store yet, so shipping that button would be a dead link on
- * the most prominent CTA of the page. The section keeps its shape and states
- * the real status instead — and points at the one thing you can actually buy
- * today, which is the merch storefront.
+ * The Figma's closing "Download on the App Store" button, live at last —
+ * this section shipped a "coming soon" status pill until the 2026-08
+ * release. Merch stays as the secondary action so the storefront keeps a
+ * below-the-fold entry point.
  */
 ---
 
@@ -19,13 +18,19 @@ import { site } from '../data/site';
     </h2>
     <p class="status">
       <span class="status-dot" aria-hidden="true"></span>
-      Coming soon to the App Store
+      Available now on the App Store
     </p>
 
-    <a class="btn btn-primary" href={site.shop.url} target="_blank" rel="noopener noreferrer">
-      Shop the merch
-      <span class="btn-icon" aria-hidden="true">→</span>
-    </a>
+    <div class="closing-actions">
+      <a class="btn btn-primary" href={site.appStore.url} target="_blank" rel="noopener noreferrer">
+        {site.appStore.label}
+        <span class="btn-icon" aria-hidden="true">↗</span>
+      </a>
+      <a class="btn btn-ghost" href={site.shop.url} target="_blank" rel="noopener noreferrer">
+        Shop the merch
+        <span class="btn-icon" aria-hidden="true">→</span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -41,6 +46,13 @@ import { site } from '../data/site';
 
   .closing-inner .h2 {
     margin-bottom: var(--space-4);
+  }
+
+  .closing-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 16px;
   }
 
   .status {

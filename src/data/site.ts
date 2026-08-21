@@ -14,6 +14,16 @@ export const site = {
   contactEmail: 'support@amorbudget.com',
 
   /**
+   * The live App Store listing (released 2026-08). Every download button on
+   * the site points here — Hero, Nav, and Closing all read from this one
+   * field.
+   */
+  appStore: {
+    url: 'https://apps.apple.com/us/app/amor-budget/id6802398906',
+    label: 'Download on the App Store',
+  },
+
+  /**
    * Shopify storefront. Shopify cannot be hosted at amorbudget.com/merch —
    * subdomains only — so /merch is our own Astro page and Shopify handles
    * checkout from there. Swap this for shop.amorbudget.com once that domain
